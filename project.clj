@@ -28,14 +28,21 @@
    [{:id           "dev"
      :source-paths ["src/cljs"]
      :figwheel     {:on-jsload "ferry-front.core/mount-root"}
-     :compiler     {:main                 ferry-front.core
+     :compiler     {:main                 "ferry-front.core"
                     :output-to            "resources/public/js/compiled/app.js"
                     :output-dir           "resources/public/js/compiled/out"
                     :asset-path           "js/compiled/out"
                     :source-map-timestamp true
-                    :preloads             [devtools.preload
-                                           day8.re-frame-10x.preload]
+                    :closure-defines {goog.DEBUG true
+                                      "re_frame.trace.trace_enabled_QMARK_" true}
+                    :preloads [devtools.preload
+                               day8.re-frame-10x.preload]
                     :external-config      {:devtools/config {:features-to-install :all}}
+                    :source-map true
+                    :optimizations :none
+                    :cache-analysis true
+                    :pretty-print true
+                    :closure-extra-annotations ["api" "observable"]
                     }}
 
 
@@ -44,8 +51,8 @@
      :source-paths ["src/cljs"]
      :compiler     {:main            ferry-front.core
                     :output-to       "resources/public/js/compiled/app.js"
-                    :optimizations   :advanced
-                    :closure-defines {goog.DEBUG false}
+                    :optimizations   :none
+                    :closure-defines {goog.DEBUG true}
                     :pretty-print    false}}
 
 

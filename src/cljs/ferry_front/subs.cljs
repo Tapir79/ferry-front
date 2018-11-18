@@ -6,3 +6,8 @@
  ::name
  (fn [db]
    (:name db)))
+
+(re-frame/reg-sub
+  ::new-booking
+  (fn [db]
+    (:new-booking db)))

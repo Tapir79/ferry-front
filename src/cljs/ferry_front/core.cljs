@@ -4,8 +4,7 @@
    [re-frame.core :as re-frame]
    [ferry-front.events :as events]
    [ferry-front.views :as views]
-   [ferry-front.config :as config]
-   ))
+   [ferry-front.config :as config]))
 
 
 (defn dev-setup []
