@@ -2,9 +2,7 @@
   (:require [reagent.core :as reagent :refer [atom]]))
 
 (defn input-field [content name on-change-function]
-  (let [input-text (reagent/atom content)])
-  [:input {:name name :on-change on-change-function}]
-  )
+  [:input {:name name :on-change on-change-function}])
 
 ;; Do this
 (defn foo []  ;; A function

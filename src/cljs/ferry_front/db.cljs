@@ -2,6 +2,4 @@
 
 (def default-db
   {:name "Smooth sailing front app"
-   :departures nil
-   :ferries nil
-   })
+   :new-booking nil})

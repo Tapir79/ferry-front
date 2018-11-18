@@ -1,5 +1,7 @@
 # ferry-front
 
+https://app.industryhack.com/challenges/smooth-sailing/?view_page=true
+
 $ lein new re-frame ferry-front
 
 ## Development Mode
