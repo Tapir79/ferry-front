@@ -11,7 +11,7 @@
     [:div
      [:h1 "Hello from " @name]
      [:div
-      [:p (str "New booking: " @(re-frame/subscribe [::subs/new-booking]))]
-      [:p (str "Atom: " @re-frame.db/app-db)]
-      #_[components/lister ()]]
-     [booking-form/booking-form]]))
+      [:p (str "Your booking: " @(re-frame/subscribe [::subs/new-booking]))]
+      [test-form/test-form]
+      #_[:p (str "Atom: " @re-frame.db/app-db)]]
+     #_[booking-form/booking-form]]))
