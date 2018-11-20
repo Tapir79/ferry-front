@@ -2,7 +2,9 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.10.238"]
                  [reagent "0.7.0"]
-                 [re-frame "0.10.5"]]
+                 [re-frame "0.10.5"]
+                 [day8.re-frame/http-fx "0.1.6"]
+                 [cljs-ajax "0.7.5"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 
@@ -45,8 +47,6 @@
                     :closure-extra-annotations ["api" "observable"]
                     }}
 
-
-
     {:id           "min"
      :source-paths ["src/cljs"]
      :compiler     {:main            ferry-front.core
@@ -54,7 +54,5 @@
                     :optimizations   :none
                     :closure-defines {goog.DEBUG true}
                     :pretty-print    false}}
-
-
     ]}
   )

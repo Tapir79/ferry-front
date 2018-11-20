@@ -4,14 +4,13 @@
    [ferry-front.subs :as subs]
    [ferry-front.views.booking-form :as booking-form]
    [ferry-front.components.components :as components]
-   ))
+   [ferry-front.views.test-form :as test-form]))
 
 (defn main-panel []
   (let [name (re-frame/subscribe [::subs/name])]
     [:div
      [:h1 "Hello from " @name]
      [:div
-      [:p (str "New booking: " @(re-frame/subscribe [::subs/new-booking]))]
-      [:p (str "Atom: " @re-frame.db/app-db)]
-      #_[components/lister ()]]
-     [booking-form/booking-form]]))
+      [test-form/test-form]
+      [:br]
+      [test-form/test-list]]]))
