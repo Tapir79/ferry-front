@@ -14,6 +14,7 @@
 
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
+  (re-frame/dispatch-sync [::events/init-tests])
   (reagent/render [views/main-panel]
                   (.getElementById js/document "app")))
 
