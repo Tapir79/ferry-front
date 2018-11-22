@@ -2,8 +2,6 @@
   (:require
    [re-frame.core :as re-frame]
    [ferry-front.subs :as subs]
-   [ferry-front.views.booking-form :as booking-form]
-   [ferry-front.components.components :as components]
    [ferry-front.views.test-form :as test-form]))
 
 (defn main-panel []
