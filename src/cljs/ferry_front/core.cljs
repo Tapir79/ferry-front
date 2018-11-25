@@ -4,8 +4,7 @@
    [re-frame.core :as re-frame]
    [ferry-front.events :as events]
    [ferry-front.views :as views]
-   [ferry-front.config :as config]
-   ))
+   [ferry-front.config :as config]))
 
 
 (defn dev-setup []
@@ -15,6 +14,7 @@
 
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
+  (re-frame/dispatch-sync [::events/init-tests])
   (reagent/render [views/main-panel]
                   (.getElementById js/document "app")))
 

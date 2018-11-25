@@ -1,4 +1,6 @@
 (ns ferry-front.db)
 
 (def default-db
-  {:name "re-frame"})
+  {:name "Smooth sailing front app"
+   :test nil
+   :tests nil})
