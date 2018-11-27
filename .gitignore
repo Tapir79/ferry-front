@@ -4,4 +4,4 @@
 /resources/public/js/compiled
 out
 .idea/
-.iml
+*.iml
