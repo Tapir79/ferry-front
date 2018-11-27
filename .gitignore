@@ -5,3 +5,4 @@
 out
 .idea/
 *.iml
+.rebel_readline_history

@@ -2,6 +2,7 @@
   (:require
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
+   [stylefy.core :as stylefy]
    [ferry-front.events :as events]
    [ferry-front.views :as views]
    [ferry-front.config :as config]))
@@ -21,4 +22,6 @@
 (defn ^:export init []
   (re-frame/dispatch-sync [::events/initialize-db])
   (dev-setup)
+  (stylefy/init {:global-vendor-prefixes {::stylefy/vendors ["webkit" "moz" "o"]
+                                          ::stylefy/auto-prefix #{:border-radius}}})
   (mount-root))
