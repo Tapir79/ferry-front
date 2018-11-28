@@ -22,5 +22,3 @@
       (own-select "route-selection" "Route" "Select route" (list "eka" "toka"))
       (own-select "from" "from" "Departure harbor" (list "satama1" "satama2"))
       (own-select "to" "to" "Arrival harbor" (list "satama1" "satama2"))]])
-
-
