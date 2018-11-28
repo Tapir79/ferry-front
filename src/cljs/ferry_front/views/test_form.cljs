@@ -13,8 +13,8 @@
   (let [tests @(re-frame/subscribe [::subs/tests])]
     [lists/bullet-list :message tests]))
 
-(defn test-form []
 
+(defn test-form []
   [:form
    [:h3 "Textfield example"]
    [:br]
