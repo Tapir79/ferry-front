@@ -3,14 +3,22 @@
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
     [ferry-front.db :as db]
-    [ajax.core :as ajax]))
+    [ajax.core :as ajax]
+    [ferry-front.events.events-timetables :as et]))
 
 (enable-console-print!)
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
+  ::initialize-timetables
+  (fn [{:keys [db]} [_ _]]
+    {:dispatch-n (list [::et/get-stop-routes])
+     :db db}))
+
+(re-frame/reg-event-fx
   ::initialize-db
-  (fn [_ _]
-    db/default-db))
+  (fn [{:keys [db]} [_ _]]
+    {:db db/default-db
+     :dispatch-n (list [::initialize-timetables])}))
 
 ;;;; Test events
 
