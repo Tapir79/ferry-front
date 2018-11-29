@@ -7,6 +7,13 @@
  (fn [db]
    (:name db)))
 
+;;; Routes subs
+
+(re-frame/reg-sub
+  ::stop-routes
+  (fn [db]
+    (:stop-routes db)))
+
 ;;;; Test subs
 
 (re-frame/reg-sub

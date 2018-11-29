@@ -3,6 +3,7 @@
                  [org.clojure/clojurescript "1.10.238"]
                  [reagent "0.7.0"]
                  [re-frame "0.10.5"]
+                 [day8.re-frame/re-frame-10x "0.3.3"]
                  [day8.re-frame/http-fx "0.1.6"]
                  [cljs-ajax "0.7.5"]
                  [stylefy "1.10.1"]]
@@ -20,7 +21,8 @@
   :profiles
   {:dev
    {:dependencies [[binaryage/devtools "0.9.10"]
-                   [day8.re-frame/re-frame-10x "0.3.3"]]
+                   [day8.re-frame/re-frame-10x "0.3.3"]
+                   [org.clojure/data.json "0.2.6"]]
 
     :plugins      [[lein-figwheel "0.5.16"]]}
    :prod { }
@@ -41,6 +43,7 @@
                     :preloads [devtools.preload
                                day8.re-frame-10x.preload]
                     :external-config      {:devtools/config {:features-to-install :all}}
+                    :externs ["externs.js"]
                     :source-map true
                     :optimizations :none
                     :cache-analysis true
@@ -54,6 +57,7 @@
                     :output-to       "resources/public/js/compiled/app.js"
                     :optimizations   :none
                     :closure-defines {goog.DEBUG true}
+                    :externs ["externs.js"]
                     :pretty-print    false}}
     ]}
   )
