@@ -4,4 +4,6 @@
   {:name "Smooth sailing front app"
    :stop-routes nil
    :test nil
-   :tests nil})
+   :tests nil
+   ; :sodra :norra :tvar
+   :chose-line-geom nil })

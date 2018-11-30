@@ -14,6 +14,11 @@
   (fn [db]
     (:stop-routes db)))
 
+(re-frame/reg-sub
+  ::chosen-line-geom
+  (fn [db]
+    (:chosen-line-geom db)))
+
 ;;;; Test subs
 
 (re-frame/reg-sub
@@ -25,3 +30,5 @@
   ::tests
   (fn [db]
     (:tests db)))
+
+
