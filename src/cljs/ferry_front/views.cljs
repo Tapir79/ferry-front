@@ -9,7 +9,7 @@
 
 (defn main-panel []
   (let [name (re-frame/subscribe [::subs/name])]
-    [:div {:class "flex flex-col"}
+    [:div {:class "flex flex-col justify-center"}
      [header]
      [main-navigation]
      [:div

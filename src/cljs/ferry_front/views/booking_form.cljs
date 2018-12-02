@@ -5,7 +5,8 @@
             [ferry-front.subs :as subs]
             [stylefy.core :refer [use-style]]))
 
-(def booking-form-style {:width "97.5%"})
+(def booking-form-style {:width "97.5%"
+                         :max-width "1590px"})
 
 (defn styled-select [id label placeholder options]
   [:div {:class "flex-grow flex-shrink mb-1 sm:m-1 w-full sm:w-auto"}
