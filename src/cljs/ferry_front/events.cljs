@@ -14,7 +14,6 @@
   ::initialize-timetables
   (fn [{:keys [db]} [_ _]]
     {:dispatch-n (list [::et/get-stop-routes]
-                       [::stops/get-stops]
                        [::et/get-line-segments]
                        )}))
 

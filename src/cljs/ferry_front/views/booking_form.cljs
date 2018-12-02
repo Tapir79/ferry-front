@@ -27,29 +27,26 @@
              :on-click handle-search-button-click
              } "Search"]])
 
-(defn get-loading-option []
-  [:option {:key "loading"} "loading..."])
+(defn get-lines-options [lines]
+  (fn []
+    (for [line @lines]
+      [:option {:key (:id line) :value (:id line)} (:name_fi line) ])))
 
-(defn get-lines-options []
-  (let [lines (re-frame/subscribe [::subs/lines])]
-    (if-not (empty? @lines)
-    (fn []
-      (for [line @lines]
-        [:option {:key (:id line) :value (:id line)} (:name_fi line) ]))
-    (get-loading-option))))
+(defn get-stops-options [stops]
+  (fn []
+    (for [stop @stops]
+      [:option {:key (:id stop) :value (:id stop)} (:name stop) ])))
 
-(defn get-stops-options []
-  (let [stops (re-frame/subscribe [::subs/stops])]
-    (if-not (empty? @stops)
-      (fn []
-        (for [stop @stops]
-          [:option {:key (:id stop) :value (:id stop)} (:name stop) ]))
-      (get-loading-option))))
+(defn form [lines stops]
+  [:div (use-style booking-form-style {:class "sm:w-full -ml-1 lg:ml-3 sm:mx-1 pb-1"})
+   [:form {:class "w-full flex flex-wrap items-center sm:items-end bg-blue-lighter rounded p-1 pb-0 sm:p-2 ml-2 mb-1"}
+    (styled-select "route-selection" "Route" "Select route" (get-lines-options lines) #(println "eka"))
+    (styled-select "from" "from" "Departure harbor" (get-stops-options stops) #(println "satama"))
+    (styled-select "to" "to" "Arrival harbor" (get-stops-options stops) #(println "arrival"))
+    (search-button)]])
 
 (defn booking-form []
-  [:div (use-style booking-form-style {:class "sm:w-full -ml-1 lg:ml-3 sm:mx-1 pb-1"})
-    [:form {:class "w-full flex flex-wrap items-center sm:items-end bg-blue-lighter rounded p-1 pb-0 sm:p-2 ml-2 mb-1"}
-      (styled-select "route-selection" "Route" "Select route" (get-lines-options) #(println "eka"))
-      (styled-select "from" "from" "Departure harbor" (get-stops-options) #(println "satama"))
-      (styled-select "to" "to" "Arrival harbor" (get-stops-options) #(println "arrival"))
-      (search-button)]])
+  (let [lines (re-frame/subscribe [::subs/lines])
+        stops (re-frame/subscribe [::subs/stops])]
+  (when-not (or (empty? @lines) (empty? @stops)))
+    (form lines stops)))
