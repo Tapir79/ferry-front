@@ -13,8 +13,7 @@
    [:select {:id id :class "rounded py-2 ph-3 bg-white w-3/5" :on-change on-change-function}
     [:option {:class "text-grey-darker"} placeholder ]
     (for [option options]
-      ^{:key option} [:option option])
-    ]])
+      ^{:key option} [:option option] )]])
 
 (defn booking-form []
   [:div {:class "w-full"}
