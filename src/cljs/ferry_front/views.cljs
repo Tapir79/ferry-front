@@ -8,7 +8,9 @@
    [ferry-front.leaflet.basic-map :as basic-map]))
 
 (defn main-panel []
-  (let [name (re-frame/subscribe [::subs/name])]
+  (let [name (re-frame/subscribe [::subs/name])
+        segments (re-frame/subscribe [::subs/linesegments])]
+
     [:div {:class "flex flex-col m-auto max-w-5xl"}
      [header]
      [main-navigation]

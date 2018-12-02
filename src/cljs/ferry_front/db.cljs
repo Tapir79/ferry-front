@@ -5,5 +5,6 @@
    :stop-routes nil
    :test nil
    :tests nil
+   :linesegments nil
    ; :sodra :norra :tvar
    :chosen-line-geom nil})
