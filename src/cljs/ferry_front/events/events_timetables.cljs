@@ -25,6 +25,7 @@
 (re-frame/reg-event-db
   ::change-line-segments
   (fn [db [_ res]]
+    (println "response:" res)
     (assoc db :linesegments res)))
 
 (re-frame/reg-event-db
@@ -49,7 +50,7 @@
     {:db         db
      :http-xhrio {:method :get
                   :uri (str "http://localhost:8080/stoproutes")
-                  :timeout 8000
+                  :timeout 50000
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::change-stop-routes]
                   :on-failure [::http-request-failed]}}))
@@ -71,9 +72,10 @@
     {:db         db
      :http-xhrio {:method :get
                   :uri (str "http://localhost:8080/linesegments")
-                  :timeout 8000
+                  :timeout 50000
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::change-line-segments]
                   :on-failure [::http-request-failed]}}))
+
 
 
