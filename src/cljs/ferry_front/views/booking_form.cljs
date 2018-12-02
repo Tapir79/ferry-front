@@ -5,6 +5,9 @@
             [ferry-front.subs :as subs]
             [stylefy.core :refer [use-style]]))
 
+(defn handle-search-button-click []
+  ())
+
 (def booking-form-style {:width "97.5%"})
 
 (defn styled-select [id label placeholder options]
@@ -18,7 +21,10 @@
 
 (defn search-button []
   [:div {:class "flex-grow flex-shrink w-full sm:w-auto my-1 sm:m-1"}
-   [:button {:class "bg-blue hover:bg-blue-dark font-semibold text-white p-2 rounded w-full sm:w-4/5"} "Search"]])
+   [:button {:class "bg-blue hover:bg-blue-dark font-semibold text-white p-2 rounded w-full sm:w-4/5"
+             :type "button"
+             :on-click handle-search-button-click
+             } "Search"]])
 
 (defn booking-form []
   [:div (use-style booking-form-style {:class "sm:w-full -ml-1 lg:ml-3 sm:mx-1 pb-1"})
