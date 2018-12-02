@@ -35,6 +35,11 @@
 
 
 (re-frame/reg-sub
+  ::line
+  (fn [db]
+    (:line db)))
+
+(re-frame/reg-sub
   ::linesegments
   (fn [db]
     (:linesegments db)))
