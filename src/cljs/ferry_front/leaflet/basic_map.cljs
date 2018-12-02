@@ -15,7 +15,7 @@
 (def url "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw")
 
 (defn home-render []
-  [:div#map {:style {:height "1200px" :width "1600px"}}])
+  [:div#map {:style {:height "600px" :width "800px"}}])
 
 
 ;var map = L.map('map').setView([51.505, -0.09], 13);
@@ -27,12 +27,10 @@
 
 (defn home-did-mount []
   (let [map (.setView (.map js/L "map") #js [60.256166965894586
-                                             20.71746826171875] 10)
+                                             20.71746826171875] 9)
         chosen-line-geom @(re-frame/subscribe [::subs/chosen-line-geom])
         stop-routes @(re-frame/subscribe [::subs/stop-routes])
-
-        second (get-in stop-routes [2])
-        test-geojson (.parse js/JSON (get-in second [:geometry]))]
+        highlight-geojson (.parse js/JSON (get-in chosen-line-geom [:geometry]))]
 
     ; add base map
     (.addTo (.tileLayer js/L url
@@ -124,12 +122,12 @@
 
 
     ; add highlighted geometry from db
-    (.addTo (.geoJson js/L test-geojson
+    (.addTo (.geoJson js/L highlight-geojson
                       (clj->js {:style
                                 {:color   "#ffff00"
                                  :weight  9
                                  :opacity 0.50}}))
-            map)))
+            map )))
 
 (defn home []
   (reagent/create-class {:reagent-render       home-render
