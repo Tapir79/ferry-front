@@ -9,8 +9,8 @@
 
 (defn styled-select [id label placeholder options]
   [:div {:class "flex-grow flex-shrink mb-1 sm:m-1 w-full sm:w-auto"}
-   [:label {:for id :class "hidden sm:block text-sm font-bold sm:pr-1"} label]
-   [:select {:id id :class "rounded py-2 ph-3 bg-white w-full"}
+   [:label {:for id :class "hidden sm:block text-sm font-bold sm:pr-1 text-grey-darker"} label]
+   [:select {:id id :class "rounded py-2 px-1 bg-white w-full"}
     [:option {:class "text-grey-darker"} placeholder ]
     (for [option options]
       ^{:key option} [:option option])
