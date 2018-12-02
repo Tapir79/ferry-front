@@ -32,14 +32,11 @@
 (re-frame/reg-event-fx
   ::initialize-db
   (fn [{:keys [db]} [_ _]]
-    {:db         db/default-db
-     :dispatch-n (list [::initialize-timetables])}))
     {:db db/default-db
      :dispatch-n (list [::initialize-timetables]
                        [::initialize-lines]
-                       [::initialize-stops]
-                       [::initialize-timetables]
-                       [::initialize-line-segements])}))
+                       [::initialize-stops])}))
+
 
 ;;;; Test events
 
