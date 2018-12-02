@@ -5,7 +5,8 @@
    [stylefy.core :as stylefy]
    [ferry-front.events :as events]
    [ferry-front.views :as views]
-   [ferry-front.config :as config]))
+   [ferry-front.config :as config]
+   [ferry-front.styles.global :refer [init-global-styles]]))
 
 
 (defn dev-setup []
@@ -24,4 +25,5 @@
   (dev-setup)
   (stylefy/init {:global-vendor-prefixes {::stylefy/vendors ["webkit" "moz" "o"]
                                           ::stylefy/auto-prefix #{:border-radius}}})
+  (init-global-styles)
   (mount-root))
