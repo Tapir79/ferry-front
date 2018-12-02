@@ -11,7 +11,9 @@
 (re-frame/reg-event-fx
   ::initialize-timetables
   (fn [{:keys [db]} [_ _]]
-    {:dispatch-n (list [::et/get-stop-routes])
+    {:dispatch-n (list [::et/get-line-segments]
+                       [::et/get-stops]
+                       [::et/get-stop-routes])
      :db db}))
 
 (re-frame/reg-event-fx

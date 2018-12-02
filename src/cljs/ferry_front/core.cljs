@@ -16,12 +16,13 @@
 
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
-  (re-frame/dispatch-sync [::events/init-tests])
+  #_(re-frame/dispatch [::events/init-tests])
+  (re-frame/dispatch [::events/initialize-db])
   (reagent/render [views/main-panel]
                   (.getElementById js/document "app")))
 
 (defn ^:export init []
-  (re-frame/dispatch-sync [::events/initialize-db])
+  #_(re-frame/dispatch-sync [::events/initialize-db])
   (dev-setup)
   (stylefy/init {:global-vendor-prefixes {::stylefy/vendors ["webkit" "moz" "o"]
                                           ::stylefy/auto-prefix #{:border-radius}}})
