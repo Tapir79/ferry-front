@@ -1,7 +1,8 @@
 (ns ferry-front.views.booking-form
   (:require [re-frame.core :as re-frame]
             [ferry-front.subs :as subs]
-            [stylefy.core :as stylefy]))
+            [stylefy.core :as stylefy]
+            [ferry-front.styles.global :refer [mobile-width]]))
 
 (enable-console-print!)
 
@@ -10,7 +11,7 @@
 
 (def booking-form-style {:width "97.5%"})
 (def icon-style {:top "29px" :left "0.5em" :pointer-events "none"
-                 ::stylefy/media {{:max-width "576px"} {:top "9px"}}})
+                 ::stylefy/media {{:max-width mobile-width} {:top "9px"}}})
 
 (defn styled-select [id label placeholder options on-change-function icon]
   [:div {:class "flex-grow flex-shrink mb-1 sm:m-1 w-full sm:w-auto relative"}
