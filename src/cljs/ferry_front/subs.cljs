@@ -19,6 +19,21 @@
   (fn [db]
     (:chosen-line-geom db)))
 
+;;;; lines subs
+
+(re-frame/reg-sub
+  ::lines
+  (fn [db]
+    (:lines db)))
+
+;;;; stops subs
+
+(re-frame/reg-sub
+  ::stops
+  (fn [db]
+    (:stops db)))
+
+
 (re-frame/reg-sub
   ::linesegments
   (fn [db]

@@ -4,7 +4,9 @@
     [day8.re-frame.http-fx]
     [ferry-front.db :as db]
     [ajax.core :as ajax]
-    [ferry-front.events.events-timetables :as et]))
+    [ferry-front.events.events-timetables :as et]
+    [ferry-front.events.lines :as lines]
+    [ferry-front.events.stops :as stops]))
 
 (enable-console-print!)
 
@@ -12,7 +14,6 @@
   ::initialize-timetables
   (fn [{:keys [db]} [_ _]]
     {:dispatch-n (list [::et/get-stop-routes]
-                       [::et/get-stops]
                        [::et/get-line-segments]
                        )}))
 
@@ -24,10 +25,25 @@
                        )}))
 
 (re-frame/reg-event-fx
+  ::initialize-lines
+  (fn [{:keys [db]} [_ _]]
+    {:dispatch-n (list [::lines/get-lines])
+     :db db}))
+
+(re-frame/reg-event-fx
+  ::initialize-stops
+  (fn [{:keys [db]} [_ _]]
+    {:dispatch-n (list [::stops/get-stops])
+     :db db}))
+
+(re-frame/reg-event-fx
   ::initialize-db
   (fn [{:keys [db]} [_ _]]
-    {:db         db/default-db
+    {:db db/default-db
      :dispatch-n (list [::initialize-timetables]
+                       [::initialize-lines]
+                       [::initialize-stops]
+                       [::initialize-timetables]
                        [::initialize-line-segements])}))
 
 ;;;; Test events
