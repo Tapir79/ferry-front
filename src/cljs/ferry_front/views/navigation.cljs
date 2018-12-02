@@ -1,7 +1,7 @@
 (ns ferry-front.views.navigation)
 
   (defn main-navigation []
-    [:nav {:class "p-1 mb-1 sm:ml-2"}
+    [:nav {:class "p-1 mb-1 sm:ml-2 lg:ml-4"}
      [:ul {:class "list-reset flex text-grey-light font-medium"}
       [:li {:class "mr-6 "}
        [:a {:class "text-white cursor-pointer"} "Booking"]]
