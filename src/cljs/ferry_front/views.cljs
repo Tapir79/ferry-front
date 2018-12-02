@@ -1,5 +1,7 @@
 (ns ferry-front.views
   (:require
+   [re-frame.core :as re-frame]
+   [ferry-front.subs :as subs]
    [ferry-front.views.header :refer [header]]
    [ferry-front.views.navigation :refer [main-navigation]]
    [ferry-front.views.booking-form :as booking-form]
@@ -12,5 +14,5 @@
      [main-navigation]
      [:div
       [booking-form/booking-form]
-      [:div {:class "w-full overflow-x-scroll"}
-        [basic-map/home]]]])
+      [:div {:class "flex justify-center"}
+        [basic-map/home]]]]))
