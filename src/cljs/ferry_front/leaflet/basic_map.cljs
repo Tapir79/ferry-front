@@ -18,13 +18,6 @@
   [:div#map {:style {:height "600px" :width "800px"}}])
 
 
-;var map = L.map('map').setView([51.505, -0.09], 13);
-;
-;L.tileLayer('http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png', {
-;                                                                     attribution: 'Map data &copy; [...]',
-;                                                                     maxZoom: 18
-;                                                                     }).addTo(map);
-
 (defn home-did-mount []
   (let [map (.setView (.map js/L "map") #js [60.256166965894586
                                              20.71746826171875] 9)
