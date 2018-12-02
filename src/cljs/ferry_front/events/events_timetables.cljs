@@ -23,9 +23,13 @@
     (assoc db :stops res)))
 
 (re-frame/reg-event-db
+  ::change-line
+  (fn [db [_ line]]
+    (assoc db :chosen-line-geom line)))
+
+(re-frame/reg-event-db
   ::change-line-segments
   (fn [db [_ res]]
-    (println "response:" res)
     (assoc db :linesegments res)))
 
 (re-frame/reg-event-db
@@ -76,6 +80,3 @@
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::change-line-segments]
                   :on-failure [::http-request-failed]}}))
-
-
-

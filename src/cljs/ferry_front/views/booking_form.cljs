@@ -2,6 +2,7 @@
   (:require [re-frame.core :as re-frame]
             [reagent.core :as reagent :refer [atom]]
             [ferry-front.events :as events]
+            [ferry-front.events.events-timetables :as t-events]
             [ferry-front.subs :as subs]
             [stylefy.core :refer [use-style]]))
 
@@ -28,7 +29,9 @@
 (defn booking-form []
   [:div (use-style booking-form-style {:class "sm:w-full -ml-1 lg:ml-3 sm:mx-1 pb-1"})
     [:form {:class "w-full flex flex-wrap items-center sm:items-end bg-blue-lighter rounded p-1 pb-0 sm:p-2 ml-2 mb-1"}
-      (styled-select "route-selection" "Route" "Select route" (list "eka" "toka") #(println "eka"))
+      (styled-select "route-selection" "Route" "Select route" (list "Södra linjen"
+                                                                     "Norra linjen"
+                                                                     "Tvärgående linjen") #(re-frame/dispatch [::t-events/change-line (.-value (.-target %))]))
       (styled-select "from" "from" "Departure harbor" (list "satama1" "satama2") #(println "satama"))
       (styled-select "to" "to" "Arrival harbor" (list "satama1" "satama2") #(println "arrival"))
      (search-button)]])

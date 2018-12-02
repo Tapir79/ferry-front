@@ -21,9 +21,10 @@
 (defn home-did-mount []
   (let [map (.setView (.map js/L "map") #js [60.256166965894586
                                              20.71746826171875] 9)
-        chosen-line-geom @(re-frame/subscribe [::subs/chosen-line-geom])
         stop-routes @(re-frame/subscribe [::subs/stop-routes])
-        highlight-geojson (.parse js/JSON (get-in chosen-line-geom [:geometry]))]
+        chosen-line @(re-frame/subscribe [::subs/stop-routes])
+        #_#_highlight-geojson (.parse js/JSON (get-in chosen-line-geom [:geometry]))]
+
 
     ; add base map
     (.addTo (.tileLayer js/L url
@@ -35,38 +36,38 @@
     ; add static line norra linje background
     (.addTo (.geoJson js/L (.parse js/JSON norra-linjen-json)
                       (clj->js {:style
-                                {:color   "#400080"
+                                {:color    "#400080"
                                  :linejoin "round"
-                                 :weight  8
-                                 :opacity 0.50}}))
+                                 :weight   8
+                                 :opacity  0.50}}))
             map)
 
     ; add static line södra linje background
     (.addTo (.geoJson js/L (.parse js/JSON sodra-linjen-json)
                       (clj->js {:style
-                                {:color   "#400080"
+                                {:color    "#400080"
                                  :linejoin "round"
-                                 :weight  8
-                                 :opacity 0.50}}))
+                                 :weight   8
+                                 :opacity  0.50}}))
             map)
 
     ; add static line tvar linje background
     (.addTo (.geoJson js/L (.parse js/JSON tvar-linjen-json)
                       (clj->js {:style
-                                {:color   "#400080"
+                                {:color    "#400080"
                                  :linejoin "round"
-                                 :weight  8
-                                 :opacity 0.50}}))
+                                 :weight   8
+                                 :opacity  0.50}}))
             map)
 
     ; add static line norra linje dashed front
     (.addTo (.geoJson js/L (.parse js/JSON norra-linjen-json)
                       (clj->js {:style
-                                {:color   "#00ccff"
-                                 :linejoin "round"
+                                {:color     "#00ccff"
+                                 :linejoin  "round"
                                  :dashArray "3"
-                                 :weight  1
-                                 :opacity 0.60}}))
+                                 :weight    1
+                                 :opacity   0.60}}))
             map)
 
     ;add static points norra linje
@@ -80,11 +81,11 @@
     ; add dashed line tvar linje
     (.addTo (.geoJson js/L (.parse js/JSON tvar-linjen-json)
                       (clj->js {:style
-                                {:color   "#00ccff"
-                                 :linejoin "round"
+                                {:color     "#00ccff"
+                                 :linejoin  "round"
                                  :dashArray "3"
-                                 :weight  1
-                                 :opacity 0.60}}))
+                                 :weight    1
+                                 :opacity   0.60}}))
             map)
 
     ;add static points tvar linje
@@ -98,11 +99,11 @@
     ; add dashed line södra linje
     (.addTo (.geoJson js/L (.parse js/JSON sodra-linjen-json)
                       (clj->js {:style
-                                {:color   "#00ccff"
-                                 :linejoin "round"
+                                {:color     "#00ccff"
+                                 :linejoin  "round"
                                  :dashArray "3"
-                                 :weight  1
-                                 :opacity 0.60}}))
+                                 :weight    1
+                                 :opacity   0.60}}))
             map)
 
     ;add static points södra linje
@@ -113,15 +114,30 @@
                                  :opacity 0.50}}))
             map)
 
-
     ; add highlighted geometry from db
-    (.addTo (.geoJson js/L highlight-geojson
+    (.addTo (.geoJson js/L (.parse js/JSON sodra-linjen-json)
+                      (println "testjson:" sodra-linjen-json)
                       (clj->js {:style
                                 {:color   "#ffff00"
                                  :weight  9
                                  :opacity 0.50}}))
-            map )))
+            map)
+    ))
+
+(defn home-did-update []
+  "Kutsutaan joka kerta, kun Reactin div-komponentti on päivittynyt"
+  (let [chosen-line-geom @(re-frame/subscribe [::subs/chosen-line-geom])]
+
+    ; add highlighted geometry from db
+    (.addTo (.geoJson js/L sodra-linjen-json
+                      (println "testjson:" sodra-linjen-json)
+                      (clj->js {:style
+                                {:color   "#ffff00"
+                                 :weight  9
+                                 :opacity 0.70}}))
+            map)))
 
 (defn home []
   (reagent/create-class {:reagent-render       home-render
-                         :component-did-mount  home-did-mount}))
+                         :component-did-mount  home-did-mount
+                         :component-did-update home-did-update}))
