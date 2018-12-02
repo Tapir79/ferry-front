@@ -13,9 +13,9 @@
   :initialised?          ;; usage (subscribe [:initialised?])
   (fn  [db _]
     (and (not (nil? (:linesegments db)))
-         (not (nil? (:stop-routes db)))))) 
+         (not (nil? (:stop-routes db))))))
 
-(defn dev-setup []
+(defn dev-setup [] 
   (when config/debug?
     (enable-console-print!)
     (println "dev mode")))
