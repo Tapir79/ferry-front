@@ -14,5 +14,5 @@
      [main-navigation]
      [:div
       [booking-form/booking-form]
-      [:div {:class "w-full overflow-x-scroll"}
+      [:div {:class "flex justify-center"}
         [basic-map/home]]]]))
