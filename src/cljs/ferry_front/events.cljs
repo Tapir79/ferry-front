@@ -13,8 +13,17 @@
 (re-frame/reg-event-fx
   ::initialize-timetables
   (fn [{:keys [db]} [_ _]]
-    {:dispatch-n (list [::et/get-stop-routes])
-     :db db}))
+    {:dispatch-n (list [::et/get-stop-routes]
+                       [::stops/get-stops]
+                       [::et/get-line-segments]
+                       )}))
+
+(re-frame/reg-event-fx
+  ::initialize-line-segements
+  (fn [{:keys [db]} [_ _]]
+    {:dispatch-n (list [::get-all-tests]
+                       [::et/get-line-segments]
+                       )}))
 
 (re-frame/reg-event-fx
   ::initialize-lines
@@ -34,7 +43,9 @@
     {:db db/default-db
      :dispatch-n (list [::initialize-timetables]
                        [::initialize-lines]
-                       [::initialize-stops])}))
+                       [::initialize-stops]
+                       [::initialize-timetables]
+                       [::initialize-line-segements])}))
 
 ;;;; Test events
 
@@ -46,31 +57,29 @@
                   :uri             (str "http://localhost:8080/tests")
                   :timeout         8000
                   :response-format (ajax/json-response-format {:keywords? true})
-                  ;:response-format (ajax/json-response-format {:keywords? true})
                   :on-success      [::change-tests]
                   :on-failure      [::http-request-failed]}}))
-
 
 (re-frame/reg-event-fx
   ::save-test
   (fn [{:keys [db]} _]
     (println "new-test" (:new-test db))
-    {:db db
-     :http-xhrio {:method :post
-                  :uri (str "http://localhost:8080/tests")
-                  :params (:new-test db)
-                  :timeout 8000
-                  :format (ajax/json-request-format)
+    {:db         db
+     :http-xhrio {:method          :post
+                  :uri             (str "http://localhost:8080/tests")
+                  :params          (:new-test db)
+                  :timeout         8000
+                  :format          (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success [::update-test-state]
-                  :on-failure [::http-request-failed]}}))
+                  :on-success      [::update-test-state]
+                  :on-failure      [::http-request-failed]}}))
 
 (re-frame/reg-event-fx
   ::update-test-state
   (fn [{:keys [db]} [_ _]]
     (println "success")
     {:dispatch-n (list [::get-all-tests])
-     :db db}))
+     :db         db}))
 
 (re-frame/reg-event-fx
   ::init-tests
@@ -97,4 +106,3 @@
   ::send-new-test
   (fn [_ _]
     (println "new booking sent")))
-
