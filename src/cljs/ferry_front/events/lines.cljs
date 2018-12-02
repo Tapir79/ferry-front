@@ -1,4 +1,4 @@
-(ns ferry-front.events.events-timetables
+(ns ferry-front.events.lines
   (:require
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
@@ -9,17 +9,17 @@
 (enable-console-print!)
 
 (re-frame/reg-event-db
-  ::change-stop-routes
+  ::change-lines
   (fn [db [_ res]]
-    (assoc db :stop-routes res)))
+    (assoc db :lines res)))
 
 (re-frame/reg-event-fx
-  ::get-stop-routes
+  ::get-lines
   (fn [{:keys [db]} [_ _]]
     {:db         db
      :http-xhrio {:method :get
-                  :uri (str "http://localhost:8080/stoproutes")
+                  :uri (str "http://localhost:8080/lines")
                   :timeout 8000
                   :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success [::change-stop-routes]
+                  :on-success [::change-lines]
                   :on-failure [::ae/http-request-failed]}}))
