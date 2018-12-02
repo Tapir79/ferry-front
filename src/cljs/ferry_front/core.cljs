@@ -8,14 +8,14 @@
    [ferry-front.config :as config]
    [ferry-front.styles.global :refer [init-global-styles]]))
 
-;
+
 (re-frame.core/reg-sub   ;; we can check if there is data
   :initialised?          ;; usage (subscribe [:initialised?])
   (fn  [db _]
     (and (not (nil? (:linesegments db)))
          (not (nil? (:stop-routes db))))))
 
-(defn dev-setup [] 
+(defn dev-setup []
   (when config/debug?
     (enable-console-print!)
     (println "dev mode")))
