@@ -55,7 +55,7 @@
                   :timeout 50000
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::change-line-segments]
-                  :on-failure [::http-request-failed]}}))
+                  :on-failure [::ae/http-request-failed]}}))
 
 
 
