@@ -27,8 +27,17 @@
   (fn [db [_ res]]
     (assoc db :linesegments res)))
 
-; from 2 to 4
-#_(re-frame/reg-event-db
+(re-frame/reg-event-db
+  ::change-from
+  (fn [db [_ from]]
+    (assoc db :from from)))
+
+(re-frame/reg-event-db
+  ::change-to
+  (fn [db [_ to]]
+    (assoc db :to to)))
+
+(re-frame/reg-event-db
   ::change-line-segment
   (fn [db [_ segment]]
     (assoc db :line-segment segment)))
@@ -62,7 +71,7 @@
     {:db         db
      :http-xhrio {:method :get
                   :uri (str "http://localhost:8080/linesegments")
-                  :timeout 30000
+                  :timeout 8000
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::change-line-segments]
                   :on-failure [::http-request-failed]}}))
