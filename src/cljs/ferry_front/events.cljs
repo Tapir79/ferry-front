@@ -15,14 +15,7 @@
   (fn [{:keys [db]} [_ _]]
     {:dispatch-n (list [::et/get-stop-routes]
                        [::et/get-line-segments]
-                       )}))
-
-(re-frame/reg-event-fx
-  ::initialize-line-segements
-  (fn [{:keys [db]} [_ _]]
-    {:dispatch-n (list [::get-all-tests]
-                       [::et/get-line-segments]
-                       )}))
+                       [::et/get-stops])}))
 
 (re-frame/reg-event-fx
   ::initialize-lines
@@ -42,9 +35,8 @@
     {:db db/default-db
      :dispatch-n (list [::initialize-timetables]
                        [::initialize-lines]
-                       [::initialize-stops]
-                       [::initialize-timetables]
-                       [::initialize-line-segements])}))
+                       [::initialize-stops])}))
+
 
 ;;;; Test events
 
@@ -105,3 +97,8 @@
   ::send-new-test
   (fn [_ _]
     (println "new booking sent")))
+
+(re-frame/reg-event-db
+  ::change-line
+  (fn [db [_ value]]
+    (assoc db :line value)))

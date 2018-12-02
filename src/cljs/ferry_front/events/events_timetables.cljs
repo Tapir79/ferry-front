@@ -14,9 +14,18 @@
     (assoc db :stop-routes res)))
 
 (re-frame/reg-event-db
+  ::change-stops
+  (fn [db [_ res]]
+    (assoc db :stops res)))
+
+(re-frame/reg-event-db
+  ::change-line
+  (fn [db [_ line]]
+    (assoc db :chosen-line-geom line)))
+
+(re-frame/reg-event-db
   ::change-line-segments
   (fn [db [_ res]]
-    (println "response:" res)
     (assoc db :linesegments res)))
 
 (re-frame/reg-event-db

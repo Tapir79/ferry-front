@@ -9,4 +9,5 @@
    :tests nil
    :linesegments nil
    ; :sodra :norra :tvar
-   :chosen-line-geom nil})
+   :chosen-line-geom nil
+   :line nil})
