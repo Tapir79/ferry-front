@@ -44,5 +44,3 @@
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::change-stops]
                   :on-failure [::http-request-failed]}}))
-
-()
