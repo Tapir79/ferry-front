@@ -8,11 +8,10 @@
    [ferry-front.leaflet.basic-map :as basic-map]))
 
 (defn main-panel []
-    (println "Main view rendering")
     [:div {:class "flex flex-col m-auto max-w-5xl"}
      [header]
      [main-navigation]
      [:div
       [booking-form/booking-form]
       [:div {:class "flex justify-center"}
-        [basic-map/home]]]]))
+        [basic-map/home]]]])
