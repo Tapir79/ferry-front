@@ -35,7 +35,7 @@
     {:db db/default-db
      :dispatch-n (list [::initialize-timetables]
                        [::initialize-lines]
-                       #_[::initialize-stops])})) 
+                       #_[::initialize-stops])}))
 
 
 ;;;; Test events
