@@ -15,8 +15,8 @@
 (def tvar-waypoints "{\"type\":\"GeometryCollection\", \"geometries\": [\n{\"type\":\"Point\",\"coordinates\":[20.5106347,60.1115177,0]},\n{\"type\":\"Point\",\"coordinates\":[20.6823206,60.1100751,0]},\n{\"type\":\"Point\",\"coordinates\":[20.726748,60.2191638,0]},\n{\"type\":\"Point\",\"coordinates\":[20.2965061,60.1176075,0]},\n{\"type\":\"Point\",\"coordinates\":[20.5106347,60.1115177,0]},\n{\"type\":\"Point\",\"coordinates\":[20.726748,60.2191638,0]}\n]}")
 (def url "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw")
 
-(defn home-render [chosen-line-geom]
-  (println "home render" chosen-line-geom)
+(defn home-render []
+  (println "home render")
   [:div#map {:style {:height "600px" :width "800px"}}])
 
 
@@ -129,15 +129,17 @@
 
 (defn home-did-update [this _]
   "Kutsutaan joka kerta, kun Reactin div-komponentti on päivittynyt"
-  (let [chosen-line-geom @(re-frame/subscribe [::subs/chosen-line-geom])
+  (let [line @(re-frame/subscribe [::subs/line])
         props (reagent/props this)
         state (reagent/state this)]
 
+    (println "props:" props)
+    (println "state:" state)
+    (println line)
     ; add highlighted geometry from db
     (.addTo (.geoJson js/L sodra-linjen-json
 
-                      (println "props:" props)
-                      (println "state:" state)
+
                       (clj->js {:style
                                 {:color   "#ffff00"
                                  :weight  9
@@ -147,9 +149,10 @@
 (defn home [chosen-line-geom]
   (reagent/create-class {:display-name "the map"
                          :reagent-render       (fn [chosen-line-geom]           ;; remember to repeat parameters
-                                                 [home-render chosen-line-geom])
+                                                 [home-render])
                          :component-did-mount   (fn [this]
                                                   (println "component-did-mount")
+                                                  (println "this:" this)
                                                   (home-did-mount this))
                          :component-did-update  (fn [this old-argv] ;; reagent provides you the entire "argv", not just the "props"
                                                   (let [new-argv (rest (reagent/argv this))]
