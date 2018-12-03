@@ -24,10 +24,19 @@
 
 (defn search-button []
   [:div {:class "flex-grow flex-shrink w-full sm:w-auto my-1 sm:m-1"}
-   [:button {:class "bg-blue hover:bg-blue-dark font-semibold text-white p-2 rounded w-full sm:w-4/5"
+   [:button {:class "bg-blue hover:bg-blue-dark font-semibold text-white p-2 rounded w-full"
              :type "button"
              :on-click handle-search-button-click
              } "Search"]])
+
+(def datepicker-style {:padding-top "0.375rem" :padding-bottom "0.375rem"})
+(defn datepicker [id label on-change-function]
+  [:div {:class "flex-grow flex-shrink mb-1 sm:m-1 w-full sm:w-auto relative"}
+   [:label {:for id :class "hidden sm:block text-sm font-bold sm:pr-1 text-grey-darker"} label]
+   [:input (stylefy/use-style datepicker-style {:class "rounded py-1 pl-8 bg-white w-full"
+            :type "date"
+            :on-change on-change-function})]
+   [:i (stylefy/use-style icon-style {:class "far fa-calendar-alt absolute z-10 text-grey-darker"})]])
 
 (defn get-lines-options [lines]
   (fn []
@@ -45,6 +54,7 @@
     (styled-select "route-selection" "Route" "Select route" (get-lines-options lines) #(re-frame/dispatch [::et-events/change-line (.-value (.-target %))] ) "fas fa-route")
     (styled-select "from" "from" "Departure harbor" (get-stops-options stops) #(println (.-value (.-target %))) "fas fa-anchor")
     (styled-select "to" "to" "Arrival harbor" (get-stops-options stops) #(println (.-value (.-target %))) "fas fa-anchor")
+    (datepicker "departure" "departure" #(println (.value (.-target %))))
     (search-button)]])
 
 (defn booking-form []
