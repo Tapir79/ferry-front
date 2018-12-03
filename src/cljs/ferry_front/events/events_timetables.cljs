@@ -44,6 +44,12 @@
     (assoc db :line-segment segment)))
 
 
+(re-frame/reg-event-db
+  ::change-stops
+  (fn [db [_ res]]
+    (assoc db :stops res)))
+
+
 (re-frame/reg-event-fx
   ::get-stop-routes
   (fn [{:keys [db]} [_ _]]
@@ -68,3 +74,13 @@
 
 
 
+(re-frame/reg-event-fx
+  ::get-stops
+  (fn [{:keys [db]} [_ _]]
+    {:db         db
+     :http-xhrio {:method :get
+                  :uri (str "http://localhost:8080/stops")
+                  :timeout 8000
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [::change-stops]
+                  :on-failure [::http-request-failed]}}))
