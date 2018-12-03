@@ -2,6 +2,7 @@
   (:require [re-frame.core :as re-frame]
             [ferry-front.subs :as subs]
             [stylefy.core :as stylefy]
+            [ferry-front.events.events-timetables :as et-events]
             [ferry-front.styles.global :refer [mobile-width]]))
 
 (enable-console-print!)
@@ -41,9 +42,9 @@
 (defn form [lines stops]
   [:div (stylefy/use-style booking-form-style {:class "sm:w-full -ml-1 lg:ml-3 sm:mx-1 pb-1"})
    [:form {:class "w-full flex flex-wrap items-center sm:items-end bg-blue-lighter rounded p-1 pb-0 sm:p-2 ml-2 mb-1"}
-    (styled-select "route-selection" "Route" "Select route" (get-lines-options lines) #(println "eka") "fas fa-route")
-    (styled-select "from" "from" "Departure harbor" (get-stops-options stops) #(println "satama") "fas fa-anchor")
-    (styled-select "to" "to" "Arrival harbor" (get-stops-options stops) #(println "arrival") "fas fa-anchor")
+    (styled-select "route-selection" "Route" "Select route" (get-lines-options lines) #(re-frame/dispatch [::et-events/change-line (.-value (.-target %))] ) "fas fa-route")
+    (styled-select "from" "from" "Departure harbor" (get-stops-options stops) #(println (.-value (.-target %))) "fas fa-anchor")
+    (styled-select "to" "to" "Arrival harbor" (get-stops-options stops) #(println (.-value (.-target %))) "fas fa-anchor")
     (search-button)]])
 
 (defn booking-form []

@@ -21,7 +21,7 @@
 (re-frame/reg-event-db
   ::change-line
   (fn [db [_ line]]
-    (assoc db :chosen-line-geom line)))
+    (assoc db :line line)))
 
 (re-frame/reg-event-db
   ::change-line-segments
