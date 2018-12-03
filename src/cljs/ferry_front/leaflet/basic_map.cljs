@@ -1,5 +1,6 @@
 (ns ferry-front.leaflet.basic-map
-  (:require [reagent.core :as reagent]
+  (:require #_[reagent.core :as reagent]
+            [reagent.core :as reagent :refer [atom]]
             [ferry-front.subs :as subs]
             [re-frame.core :as re-frame]
             ))
@@ -14,19 +15,20 @@
 (def tvar-waypoints "{\"type\":\"GeometryCollection\", \"geometries\": [\n{\"type\":\"Point\",\"coordinates\":[20.5106347,60.1115177,0]},\n{\"type\":\"Point\",\"coordinates\":[20.6823206,60.1100751,0]},\n{\"type\":\"Point\",\"coordinates\":[20.726748,60.2191638,0]},\n{\"type\":\"Point\",\"coordinates\":[20.2965061,60.1176075,0]},\n{\"type\":\"Point\",\"coordinates\":[20.5106347,60.1115177,0]},\n{\"type\":\"Point\",\"coordinates\":[20.726748,60.2191638,0]}\n]}")
 (def url "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw")
 
-(defn home-render []
+(defn home-render [chosen-line-geom]
+  (println "home render" chosen-line-geom)
   [:div#map {:style {:height "600px" :width "800px"}}])
 
 
-(defn home-did-mount [chosen-line-geom]
+(defn home-did-mount [this]
   (let [map (.setView (.map js/L "map") #js [60.256166965894586
                                              20.71746826171875] 9)
         stop-routes @(re-frame/subscribe [::subs/stop-routes])
         chosen-line @(re-frame/subscribe [::subs/stop-routes])
-        highlight-geojson (.parse js/JSON (get-in chosen-line-geom [:geometry]))]
+        #_#_highlight-geojson (.parse js/JSON (get-in chosen-line-geom [:geometry]))]
 
 
-    (println chosen-line-geom)
+    #_(println chosen-line-geom)
     ; add base map
     (.addTo (.tileLayer js/L url
                         (clj->js {:attribution "'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>"
@@ -135,6 +137,7 @@
     (.addTo (.geoJson js/L sodra-linjen-json
 
                       (println "props:" props)
+                      (println "state:" state)
                       (clj->js {:style
                                 {:color   "#ffff00"
                                  :weight  9
@@ -142,6 +145,13 @@
             map)))
 
 (defn home [chosen-line-geom]
-  (reagent/create-class {:reagent-render       home-render
-                         :component-did-mount  home-did-mount
-                         :component-did-update home-did-update}))
+  (reagent/create-class {:display-name "the map"
+                         :reagent-render       (fn [chosen-line-geom]           ;; remember to repeat parameters
+                                                 [home-render chosen-line-geom])
+                         :component-did-mount   (fn [this]
+                                                  (println "component-did-mount")
+                                                  (home-did-mount this))
+                         :component-did-update  (fn [this old-argv] ;; reagent provides you the entire "argv", not just the "props"
+                                                  (let [new-argv (rest (reagent/argv this))]
+                                                    (println "component did update")
+                                                    (home-did-update new-argv old-argv)))}))

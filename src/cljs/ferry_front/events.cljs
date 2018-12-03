@@ -15,7 +15,8 @@
   (fn [{:keys [db]} [_ _]]
     {:dispatch-n (list [::et/get-stop-routes]
                        [::et/get-line-segments]
-                       [::et/get-stop-lines])}))
+                       [::et/get-stops]
+                       [::lines/get-lines])}))
 
 (re-frame/reg-event-fx
   ::initialize-lines
@@ -34,7 +35,7 @@
   (fn [{:keys [db]} [_ _]]
     {:db db/default-db
      :dispatch-n (list [::initialize-timetables]
-                       [::initialize-lines]
+                       #_[::initialize-lines]
                        #_[::initialize-stops])}))
 
 
