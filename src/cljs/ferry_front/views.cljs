@@ -14,4 +14,4 @@
      [:div
       [booking-form/booking-form]
       [:div {:class "flex justify-center"}
-        [basic-map/home]]]])
+        [basic-map/home @(re-frame/subscribe [::subs/chosen-line-geom])]]]])

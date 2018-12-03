@@ -18,14 +18,15 @@
   [:div#map {:style {:height "600px" :width "800px"}}])
 
 
-(defn home-did-mount []
+(defn home-did-mount [chosen-line-geom]
   (let [map (.setView (.map js/L "map") #js [60.256166965894586
                                              20.71746826171875] 9)
         stop-routes @(re-frame/subscribe [::subs/stop-routes])
         chosen-line @(re-frame/subscribe [::subs/stop-routes])
-        #_#_highlight-geojson (.parse js/JSON (get-in chosen-line-geom [:geometry]))]
+        highlight-geojson (.parse js/JSON (get-in chosen-line-geom [:geometry]))]
 
 
+    (println chosen-line-geom)
     ; add base map
     (.addTo (.tileLayer js/L url
                         (clj->js {:attribution "'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>"
@@ -115,7 +116,7 @@
             map)
 
     ; add highlighted geometry from db
-    (.addTo (.geoJson js/L (.parse js/JSON sodra-linjen-json)
+    #_(.addTo (.geoJson js/L (.parse js/JSON sodra-linjen-json)
                       (println "testjson:" sodra-linjen-json)
                       (clj->js {:style
                                 {:color   "#ffff00"
@@ -124,20 +125,23 @@
             map)
     ))
 
-(defn home-did-update []
+(defn home-did-update [this _]
   "Kutsutaan joka kerta, kun Reactin div-komponentti on päivittynyt"
-  (let [chosen-line-geom @(re-frame/subscribe [::subs/chosen-line-geom])]
+  (let [chosen-line-geom @(re-frame/subscribe [::subs/chosen-line-geom])
+        props (reagent/props this)
+        state (reagent/state this)]
 
     ; add highlighted geometry from db
     (.addTo (.geoJson js/L sodra-linjen-json
-                      (println "testjson:" sodra-linjen-json)
+
+                      (println "props:" props)
                       (clj->js {:style
                                 {:color   "#ffff00"
                                  :weight  9
                                  :opacity 0.70}}))
             map)))
 
-(defn home []
+(defn home [chosen-line-geom]
   (reagent/create-class {:reagent-render       home-render
                          :component-did-mount  home-did-mount
                          :component-did-update home-did-update}))

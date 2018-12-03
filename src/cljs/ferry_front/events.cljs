@@ -15,7 +15,7 @@
   (fn [{:keys [db]} [_ _]]
     {:dispatch-n (list [::et/get-stop-routes]
                        [::et/get-line-segments]
-                       [::et/get-stops])}))
+                       [::et/get-stop-lines])}))
 
 (re-frame/reg-event-fx
   ::initialize-lines
@@ -23,7 +23,7 @@
     {:dispatch-n (list [::lines/get-lines])
      :db db}))
 
-(re-frame/reg-event-fx
+#_(re-frame/reg-event-fx
   ::initialize-stops
   (fn [{:keys [db]} [_ _]]
     {:dispatch-n (list [::stops/get-stops])
@@ -35,7 +35,7 @@
     {:db db/default-db
      :dispatch-n (list [::initialize-timetables]
                        [::initialize-lines]
-                       [::initialize-stops])}))
+                       #_[::initialize-stops])}))
 
 
 ;;;; Test events
