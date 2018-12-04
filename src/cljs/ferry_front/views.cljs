@@ -6,7 +6,6 @@
    [ferry-front.views.navigation :refer [main-navigation]]
    [ferry-front.views.booking-form :as booking-form]
    [ferry-front.views.timetables :as timetables]
-   [ferry-front.leaflet.basic-map :as basic-map]))
    [ferry-front.leaflet.basic-map :as basic-map]
    [ferry-front.leaflet.core :refer [leaflet]]))
 
