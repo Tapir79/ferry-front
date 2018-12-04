@@ -1,9 +1,8 @@
 (ns ferry-front.leaflet.basic-map
   (:require #_[reagent.core :as reagent]
-            [reagent.core :as reagent :refer [atom]]
-            [ferry-front.subs :as subs]
-            [re-frame.core :as re-frame]
-            ))
+    [reagent.core :as reagent :refer [atom]]
+    [ferry-front.subs :as subs]
+    [re-frame.core :as re-frame]))
 
 (enable-console-print!)
 
@@ -15,34 +14,27 @@
 (def tvar-waypoints "{\"type\":\"GeometryCollection\", \"geometries\": [\n{\"type\":\"Point\",\"coordinates\":[20.5106347,60.1115177,0]},\n{\"type\":\"Point\",\"coordinates\":[20.6823206,60.1100751,0]},\n{\"type\":\"Point\",\"coordinates\":[20.726748,60.2191638,0]},\n{\"type\":\"Point\",\"coordinates\":[20.2965061,60.1176075,0]},\n{\"type\":\"Point\",\"coordinates\":[20.5106347,60.1115177,0]},\n{\"type\":\"Point\",\"coordinates\":[20.726748,60.2191638,0]}\n]}")
 (def url "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw")
 
-(defn home-render []
-  (println "home render")
-  [:div#map {:style {:height "600px" :width "800px"}}])
+
+(defn home-render [this]
+  (let [height (:height this)
+        width (:width this)]
+    (println "home-render")
+    [:div#map {:style {:height height :width width}}]))
 
 
 (defn home-did-mount [this]
-  (let [map (.setView (.map js/L "map") #js [60.256166965894586
-                                             20.71746826171875] 9)
-        stop-routes @(re-frame/subscribe [::subs/stop-routes])
-        chosen-line @(re-frame/subscribe [::subs/stop-routes])
-        #_#_highlight-geojson (.parse js/JSON (get-in chosen-line-geom [:geometry]))]
+  (let [mapspec (:mapspec (reagent/state this))
+        map (.setView (.map js/L "map") #js [60.256166965894586
+                                             20.71746826171875] 9)]
 
 
-    #_(println chosen-line-geom)
+    (println "home-did-mount")
+
     ; add base map
     (.addTo (.tileLayer js/L url
                         (clj->js {:attribution "'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>"
                                   :id          "mapbox.streets"
                                   :maxZoom     18}))
-            map)
-
-    ; add static line norra linje background
-    (.addTo (.geoJson js/L (.parse js/JSON norra-linjen-json)
-                      (clj->js {:style
-                                {:color    "#400080"
-                                 :linejoin "round"
-                                 :weight   8
-                                 :opacity  0.50}}))
             map)
 
     ; add static line södra linje background
@@ -54,8 +46,27 @@
                                  :opacity  0.50}}))
             map)
 
+    ; add static line norra linje background
+    #_(.addTo (.geoJson js/L (.parse js/JSON norra-linjen-json)
+                      (clj->js {:style
+                                {:color    "#400080"
+                                 :linejoin "round"
+                                 :weight   8
+                                 :opacity  0.50}}))
+            map)
+
+    ; add dashed line södra linje
+    #_(.addTo (.geoJson js/L (.parse js/JSON sodra-linjen-json)
+                      (clj->js {:style
+                                {:color     "#00ccff"
+                                 :linejoin  "round"
+                                 :dashArray "3"
+                                 :weight    1
+                                 :opacity   0.60}}))
+            map)
+
     ; add static line tvar linje background
-    (.addTo (.geoJson js/L (.parse js/JSON tvar-linjen-json)
+    #_(.addTo (.geoJson js/L (.parse js/JSON tvar-linjen-json)
                       (clj->js {:style
                                 {:color    "#400080"
                                  :linejoin "round"
@@ -64,7 +75,7 @@
             map)
 
     ; add static line norra linje dashed front
-    (.addTo (.geoJson js/L (.parse js/JSON norra-linjen-json)
+    #_(.addTo (.geoJson js/L (.parse js/JSON norra-linjen-json)
                       (clj->js {:style
                                 {:color     "#00ccff"
                                  :linejoin  "round"
@@ -74,7 +85,7 @@
             map)
 
     ;add static points norra linje
-    (.addTo (.geoJson js/L (.parse js/JSON norra-waypoints)
+    #_(.addTo (.geoJson js/L (.parse js/JSON norra-waypoints)
                       (clj->js {:style
                                 {:color   "#400080"
                                  :weight  1
@@ -82,7 +93,7 @@
             map)
 
     ; add dashed line tvar linje
-    (.addTo (.geoJson js/L (.parse js/JSON tvar-linjen-json)
+    #_(.addTo (.geoJson js/L (.parse js/JSON tvar-linjen-json)
                       (clj->js {:style
                                 {:color     "#00ccff"
                                  :linejoin  "round"
@@ -92,25 +103,24 @@
             map)
 
     ;add static points tvar linje
-    (.addTo (.geoJson js/L (.parse js/JSON tvar-waypoints)
+    #_(.addTo (.geoJson js/L (.parse js/JSON tvar-waypoints)
                       (clj->js {:style
                                 {:color   "#400080"
                                  :weight  1
                                  :opacity 0.50}}))
             map)
 
-    ; add dashed line södra linje
-    (.addTo (.geoJson js/L (.parse js/JSON sodra-linjen-json)
-                      (clj->js {:style
-                                {:color     "#00ccff"
-                                 :linejoin  "round"
-                                 :dashArray "3"
-                                 :weight    1
-                                 :opacity   0.60}}))
-            map)
+
+
+    ;    L.geoJSON(mygeojson, { style: {
+    ;    "color": "#ff7800",
+    ;    "weight": 5,
+    ;    "opacity": 0.65
+    ;}}
+    ;    ).addTo(mymap);
 
     ;add static points södra linje
-    (.addTo (.geoJson js/L (.parse js/JSON sodra-waypoints)
+    #_(.addTo (.geoJson js/L (.parse js/JSON sodra-waypoints)
                       (clj->js {:style
                                 {:color   "#400080"
                                  :weight  1
@@ -119,42 +129,55 @@
 
     ; add highlighted geometry from db
     #_(.addTo (.geoJson js/L (.parse js/JSON sodra-linjen-json)
-                      (println "testjson:" sodra-linjen-json)
-                      (clj->js {:style
-                                {:color   "#ffff00"
-                                 :weight  9
-                                 :opacity 0.50}}))
-            map)
+                        #_(println "testjson:" sodra-linjen-json)
+                        (clj->js {:style
+                                  {:color   "#ffff01"
+                                   :weight  10
+                                   :opacity 0.50}}))
+              map)
     ))
 
-(defn home-did-update [this _]
+(defn home-did-update [this old]
   "Kutsutaan joka kerta, kun Reactin div-komponentti on päivittynyt"
-  (let [line @(re-frame/subscribe [::subs/line])
-        props (reagent/props this)
-        state (reagent/state this)]
-
-    (println "props:" props)
-    (println "state:" state)
-    (println line)
+  (let [line (:line this)]
     ; add highlighted geometry from db
-    (.addTo (.geoJson js/L sodra-linjen-json
+
+    (println "did update")
+    ; somehow pass in the map
+
+    ;map.eachLayer(function (layer) {
+    ;    map.removeLayer(layer)
+    ;});
 
 
+
+
+;    L.geoJSON(mygeojson, { style: {
+    ;    "color": "#ff7800",
+    ;    "weight": 5,
+    ;    "opacity": 0.65
+    ;}}
+    ;    ).addTo(mymap);
+
+    #_(println "js/L" js/L)
+    (.addTo (.geoJson js/L (.parse js/JSON sodra-linjen-json)
                       (clj->js {:style
                                 {:color   "#ffff00"
-                                 :weight  9
+                                 :weight  line
                                  :opacity 0.70}}))
             map)))
 
-(defn home [chosen-line-geom]
-  (reagent/create-class {:display-name "the map"
-                         :reagent-render       (fn [chosen-line-geom]           ;; remember to repeat parameters
-                                                 [home-render])
-                         :component-did-mount   (fn [this]
-                                                  (println "component-did-mount")
-                                                  (println "this:" this)
-                                                  (home-did-mount this))
-                         :component-did-update  (fn [this old-argv] ;; reagent provides you the entire "argv", not just the "props"
-                                                  (let [new-argv (rest (reagent/argv this))]
-                                                    (println "component did update")
-                                                    (home-did-update new-argv old-argv)))}))
+(defn home [mapspec]
+  (println "at home before create class")
+  (reagent/create-class {:get-initial-state    (fn [_] {:mapspec mapspec})
+                         :display-name         "the map"
+                         :reagent-render       (fn [this]       ;; remember to repeat parameters
+                                                 [home-render this])
+                         :component-did-mount  (fn [this old-argv]
+                                                 (println "component-did-mount")
+                                                 (println "this:" this)
+                                                 (home-did-mount this))
+                         :component-did-update (fn [this old-argv] ;; reagent provides you the entire "argv", not just the "props"
+                                                 (let [new-argv (rest (reagent/argv this))]
+                                                   (home-did-update new-argv old-argv)
+                                                   ))}))
