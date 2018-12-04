@@ -5,6 +5,7 @@
    [ferry-front.views.header :refer [header]]
    [ferry-front.views.navigation :refer [main-navigation]]
    [ferry-front.views.booking-form :as booking-form]
+   [ferry-front.views.timetables :as timetables]
    [ferry-front.leaflet.basic-map :as basic-map]
    [ferry-front.leaflet.core :refer [leaflet]]))
 
@@ -68,6 +69,7 @@
      [main-navigation]
      [:div
       [booking-form/booking-form]
+      [timetables/booking-timetable]
       [:div {:class "flex justify-center"}
        [leaflet {:id "kartta"
                  :width "100%" :height "300px" ;; set width/height as CSS units

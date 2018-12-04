@@ -1,14 +1,11 @@
 (ns ferry-front.views.booking-form
-  (:require [re-frame.core :as re-frame]
+  (:require [re-frame.core :as rf]
             [ferry-front.subs :as subs]
             [stylefy.core :as stylefy]
-            [ferry-front.events.events-timetables :as et-events]
+            [ferry-front.events.booking :as e-booking]
             [ferry-front.styles.global :refer [mobile-width]]))
 
 (enable-console-print!)
-
-(defn handle-search-button-click []
-  ())
 
 (def booking-form-style {:width "97.5%"})
 
@@ -27,13 +24,12 @@
   [:div {:class "flex-grow flex-shrink w-full sm:w-auto my-1 sm:m-1"}
    [:button {:class "bg-blue hover:bg-blue-dark font-semibold text-white p-2 rounded w-full"
              :type "button"
-             :on-click handle-search-button-click
+             :on-click #(rf/dispatch [::e-booking/search-click])
              } "Search"]])
 
 (def exchange-icon-style {:top "2.1em" :right "-1.1em"
                           ::stylefy/media {{:max-width mobile-width}
                                            {:top "0.7em" :right "-1.3em" :transform "rotate(90deg)"}}})
-
 
 (defn exchange-harbors-wrapper [wrapped-input]
   [:div {:class "flex-grow flex-shrink w-full sm:w-auto relative mr-6 sm:mr-5"}
@@ -63,17 +59,17 @@
       [:option {:key (:id stop) :value (:id stop)} (:name stop) ])))
 
 (defn form [lines stops]
-  [:div (stylefy/use-style booking-form-style {:class "sm:w-full -ml-1 lg:ml-3 sm:mx-1 pb-1"})
+  [:div (stylefy/use-style booking-form-style {:class "sm:w-full -ml-1 lg:ml-3 sm:mx-1"})
    [:form {:class "w-full flex flex-wrap items-center sm:items-end bg-blue-lighter rounded p-1 pb-0 sm:p-2 ml-2 mb-1"}
-    (styled-select "route-selection" "Route" "Select route" (get-lines-options lines) #(re-frame/dispatch [::et-events/change-line (.-value (.-target %))] ) "fas fa-route")
+    (styled-select "route-selection" "Route" "Select route" (get-lines-options lines) #(rf/dispatch[::e-booking/change-line (.-value (.-target %))]) "fas fa-route")
     (exchange-harbors-wrapper
-      (fn [] (styled-select "from" "from" "Departure harbor" (get-stops-options stops) #(println (.-value (.-target %))) "fas fa-anchor")))
-    (styled-select "to" "to" "Arrival harbor" (get-stops-options stops) #(println (.-value (.-target %))) "fas fa-anchor")
+      (fn [] (styled-select "from" "from" "Departure harbor" (get-stops-options stops) #(rf/dispatch [::e-booking/change-departure-stop (.-value (.-target %))]) "fas fa-anchor")))
+    (styled-select "to" "to" "Arrival harbor" (get-stops-options stops) #(rf/dispatch [::e-booking/change-destination-stop (.-value (.-target %))]) "fas fa-anchor")
     (datepicker "departure" "departure" #(println (.value (.-target %))))
     (search-button)]])
 
 (defn booking-form []
-  (let [lines (re-frame/subscribe [::subs/lines])
-        stops (re-frame/subscribe [::subs/stops])]
+  (let [lines (rf/subscribe [::subs/lines])
+        stops (rf/subscribe [::subs/stops])]
   (when-not (or (empty? @lines) (empty? @stops)))
     (form lines stops)))
