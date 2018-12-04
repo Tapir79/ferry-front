@@ -5,6 +5,7 @@
    [ferry-front.views.header :refer [header]]
    [ferry-front.views.navigation :refer [main-navigation]]
    [ferry-front.views.booking-form :as booking-form]
+   [ferry-front.views.timetables :as timetables]
    [ferry-front.leaflet.basic-map :as basic-map]))
 
 (defn main-panel []
@@ -13,5 +14,6 @@
      [main-navigation]
      [:div
       [booking-form/booking-form]
+      [timetables/booking-timetable]
       [:div {:class "flex justify-center"}
         [basic-map/home @(re-frame/subscribe [::subs/chosen-line-geom])]]]])
