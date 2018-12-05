@@ -9,8 +9,6 @@
    [ferry-front.leaflet.basic-map :as basic-map]
    [ferry-front.leaflet.core :refer [leaflet]]))
 
-
-
 (def norra-linjen-json "{\"type\":\"GeometryCollection\", \"geometries\": [\n{\"type\":\"LineString\",\"coordinates\":[[21.0380781,60.3565814],[21.0382179,60.3553567],[21.0375569,60.3546156],[21.0375128,60.3521958],[21.0374247,60.3506916],[21.0356178,60.3480535],[21.0327973,60.3442814],[21.0324888,60.3435836],[21.0326651,60.3390258],[21.0327091,60.3352745],[21.0324888,60.3344238],[21.0283902,60.330432],[21.0273766,60.3297557],[21.011379,60.3204393],[21.0089551,60.3187808],[21.0058702,60.3181479],[21.00097,60.3178095],[20.9959478,60.3174626],[21.000977,60.3174574],[21.0059969,60.3174981],[21.0084704,60.3170131],[21.0093077,60.3162711],[21.0115553,60.3108582],[21.0123926,60.3088282],[21.0120841,60.3081733],[21.0114231,60.30706],[21.0092195,60.305379],[21.0035345,60.3011216],[20.9923405,60.2929327],[20.9911947,60.2922119],[20.9895641,60.2916659],[20.9871843,60.291513],[20.9816755,60.2913383],[20.9735224,60.2912509],[20.9703053,60.2912073],[20.9617997,60.2909233],[20.9577452,60.290967],[20.9529856,60.2911199],[20.9404255,60.2918406],[20.9299367,60.2918188],[20.901335,60.2917314],[20.892565,60.2916441],[20.8833983,60.2914038],[20.8783302,60.2911636],[20.8670481,60.2901589],[20.8640954,60.290006],[20.8625529,60.2897657],[20.8477453,60.2853534],[20.8467757,60.2851786],[20.8254456,60.2847635],[20.8234624,60.2851349],[20.8227132,60.2856155],[20.8020001,60.2950947],[20.800678,60.2954223],[20.7984745,60.2954223],[20.7952573,60.2952694],[20.7934063,60.2947672],[20.7915213,60.2932543],[20.7907349,60.2914748],[20.7901287,60.2904026],[20.7900959,60.2915048],[20.7905234,60.2933364],[20.7909943,60.2964539],[20.7911361,60.2988542],[20.7911137,60.300018],[20.7898398,60.3012264],[20.7768164,60.307132],[20.7536839,60.3173201],[20.7513513,60.3183138],[20.7532177,60.3170526],[20.7535002,60.3157748],[20.7531392,60.3143331],[20.7518576,60.3130214],[20.7507718,60.3124468],[20.7443818,60.3089555],[20.7406149,60.308118],[20.7362386,60.3071507],[20.7341915,60.3062021],[20.729194,60.3021169],[20.7249325,60.2987367],[20.7220025,60.2970702],[20.7073801,60.2914643],[20.6959614,60.286911],[20.6851264,60.2825724],[20.6744544,60.2782402],[20.6636269,60.2738691],[20.6546511,60.2702029],[20.6512201,60.269176],[20.6304683,60.2648218],[20.612754,60.2609731],[20.5953818,60.2571799],[20.5784603,60.2534389],[20.5655181,60.2506334],[20.5502005,60.2491236],[20.5301966,60.2473464],[20.5190451,60.2462964],[20.4646746,60.2400221],[20.4491392,60.2381075],[20.4469076,60.2373187],[20.4246989,60.2253099],[20.4220811,60.2244318],[20.4192272,60.224069],[20.4144713,60.2240448],[20.4136621,60.2242177]]}\n]}")
 (def norra-waypoints "{\"type\":\"GeometryCollection\", \"geometries\": [\n{\"type\":\"Point\",\"coordinates\":[20.7513513,60.3183138,0]},\n{\"type\":\"Point\",\"coordinates\":[21.0380781,60.3565814,0]},\n{\"type\":\"Point\",\"coordinates\":[20.7901287,60.2904026,0]},\n{\"type\":\"Point\",\"coordinates\":[20.9959478,60.3174626,0]},\n{\"type\":\"Point\",\"coordinates\":[20.4136621,60.2242177,0]}\n]}")
 (def sodra-linjen-json "{\"type\":\"GeometryCollection\", \"geometries\": [{\"type\":\"LineString\",\"coordinates\":[[20.8073747,60.0647341],[20.7828927,60.0585919],[20.7910243,60.0369224],[20.8011559,60.0251313],[20.8250786,60.0312659]]},\n{\"type\":\"LineString\",\"coordinates\":[[20.8917824,59.9455971],[20.8915331,59.9641436],[20.9621996,59.966747],[21.0546149,59.9733263],[21.0771815,59.9880561],[21.1244003,60.0290056],[21.206846,60.0715985],[21.3081992,60.1202512],[21.4408248,60.1763707],[21.4937673,60.1898195],[21.5485938,60.1956486],[21.5865524,60.1846737]]},\n{\"type\":\"LineString\",\"coordinates\":[[20.2965061,60.1176075],[20.3231026,60.1136252],[20.3779227,60.1143181],[20.4224946,60.1039583],[20.4502996,60.1015393],[20.4815414,60.1139846],[20.5106347,60.1115177]]},\n{\"type\":\"LineString\",\"coordinates\":[[20.5106347,60.1115177],[20.58542,60.1260053],[20.6717787,60.0967685],[20.6902252,60.0965176],[20.7021309,60.1061828],[20.6823206,60.1100751]]},\n{\"type\":\"LineString\",\"coordinates\":[[20.6823206,60.1100751],[20.7193995,60.1056333],[20.7488286,60.0950868],[20.7714318,60.069322],[20.8073747,60.0647341]]},\n{\"type\":\"LineString\",\"coordinates\":[[20.8250786,60.0312659],[20.7985139,60.0195368],[20.7982403,60.0105233],[20.8286244,59.9818526],[20.8893901,59.9633281],[20.8917824,59.9455971]]}]}")
@@ -21,49 +19,117 @@
 
 (defonce app-state (atom {:text "Svg test!" :fill-number 0 :url sodra-linjen-json}))
 
-(def jsons [{:type :json
-             :url sodra-linjen-json
-             :color    "#200080"
+(def jsons [{:type     :json
+             :url      sodra-linjen-json
+             :color    "red"
              :linejoin "round"
              :weight   3
              :opacity  0.50}
-            {:type :json
-             :url norra-linjen-json
-             :color    "#400081"
+            {:type     :json
+             :url      norra-linjen-json
+             :color    "blue"
              :linejoin "round"
              :weight   3
              :opacity  0.50}
-            {:type :json
-             :url tvar-linjen-json
-             :color    "#400082"
+            {:type     :json
+             :url      tvar-linjen-json
+             :color    "orange"
              :linejoin "round"
              :weight   3
              :opacity  0.50}])
 
-(def geometries (atom [{:type :polygon
-                        :coordinates [[61.256166965894586
-                                       20.71746826171875]
-                                      [60.236166965894586
+
+(def jsons-norra [{:type     :json
+                   :url      norra-linjen-json
+                   :color    "#400081"
+                   :linejoin "round"
+                   :weight   3
+                   :opacity  0.50}])
+
+(def jsons-sodra [{:type     :json
+                   :url      sodra-linjen-json
+                   :color    "#200080"
+                   :linejoin "round"
+                   :weight   3
+                   :opacity  0.50}])
+
+(def jsons-tvar [{:type     :json
+                   :url      tvar-linjen-json
+                   :color    "#200080"
+                   :linejoin "round"
+                   :weight   3
+                   :opacity  0.50}])
+
+
+;; geometriat json-objekteista
+;; json-objektista clojuremapiksi
+;; mapista geometria
+;; geometriasta coordinates
+;; koordinaatit atomiin
+
+
+
+(def geometries (atom [{:type        :polygon
+                        :coordinates [[60.24526400957346
+                                       20.323333740234375]
+                                      [60.2111688671788
                                        20.75746826171875]
-                                      [60.246166965894586
-                                       20.72746826171875]]}
+                                      [60.24049282458596
+                                       20.466156005859375]
+                                      [60.24526400957346
+                                       20.323333740234375]]}
 
-                       {:type :line
-                        :coordinates [[60.256166965894586
-                                       20.71746826171875]
-                                      [60.256166965894586
-                                       20.73746826171875]]}]))
+                       #_{:type        :line
+                          :coordinates [[60.256166965894586
+                                         20.71746826171875]
+                                        [60.256166965894586
+                                         20.73746826171875]]}]))
 
-(def view-position (atom [60.256166965894586
-                          20.71746826171875]))
-(def zoom-level (atom 8))
 
+(def geometries2 (atom [{:type        :polygon
+                         :coordinates [[60.24526400957346
+                                        20.323333740234375]
+                                       [60.2111688671788
+                                        20.75746826171875]
+                                       [60.24049282458596
+                                        20.466156005859375]
+                                       [60.24526400957346
+                                        20.323333740234375]]}
+
+                        #_{:type        :line
+                           :coordinates [[60.256166965894586
+                                          20.71746826171875]
+                                         [60.256166965894586
+                                          20.73746826171875]]}]))
+
+(def geometries3 (atom [{:type        :polygon
+                         :coordinates [[60.24526400957346
+                                        20.323333740234375]
+                                       [60.2111688671788
+                                        20.75746826171875]
+                                       [60.24049282458596
+                                        20.466156005859375]
+                                       [60.24526400957346
+                                        20.323333740234375]]}
+
+                        #_{:type        :line
+                           :coordinates [[60.256166965894586
+                                          20.71746826171875]
+                                         [60.256166965894586
+                                          20.73746826171875]]}]))
+
+(def view-position (atom [59.75
+                          21.00]))
+(def zoom-level (atom 9))
 
 
 
 (defn main-panel []
   (let [line @(re-frame/subscribe [::subs/line])
-        drawing (atom false)]
+        drawing (atom false)
+        line-color (str "#4286f" line)]
+
+    (println "what's the line " line)
     [:div {:class "flex flex-col m-auto max-w-5xl"}
      [header]
      [main-navigation]
@@ -71,23 +137,23 @@
       [booking-form/booking-form]
       [timetables/booking-timetable]
       [:div {:class "flex justify-center"}
-       [leaflet {:id "kartta"
-                 :width "100%" :height "300px" ;; set width/height as CSS units
-                 :view view-position ;; map center position
-                 :zoom zoom-level ;; map zoom level
+       [leaflet {:id         "kartta"
+                 :width      "1000px" :height "1000px"      ;; set width/height as CSS units
+                 :view       view-position                  ;; map center position
+                 :zoom       zoom-level                     ;; map zoom level
 
                  ;; The actual map data (tile layers from OpenStreetMap), also supported is
                  ;; :wms type
-                 :layers [{:type :tile
-                           :url "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-                           :attribution "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"}]
-                 :jsons jsons
-                 :line line
-                 ;; Geometry shapes to draw to the map
-                 :geometries geometries
-
-                 }
-        ]
+                 :layers     [{:type        :tile
+                               :url         "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+                               :attribution "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"}]
+                 :base-jsons jsons
+                 :jsons      (cond
+                               (>= line 1) jsons-norra
+                               (>= line 2) jsons-sodra
+                               (>= line 3) jsons-tvar
+                               :else nil)
+                 :line-color line-color}]
 
 
 
@@ -106,19 +172,19 @@
 
 
 
-       #_[basic-map/home {:id "mapbox.streets"
-                         :width "800px"
-                         :height "600px" ;; set width/height as CSS units
-                         :view 4 ;; map center position
-                         :zoom 5 ;; map zoom level
+       #_[basic-map/home {:id     "mapbox.streets"
+                          :width  "800px"
+                          :height "600px"                   ;; set width/height as CSS units
+                          :view   4                         ;; map center position
+                          :zoom   5                         ;; map zoom level
 
-                         ;; The actual map data (tile layers from OpenStreetMap), also supported is
-                         ;; :wms type
-                         :layers [{:type :tile
-                                   :url "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-                                   :attribution "'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>"}]
+                          ;; The actual map data (tile layers from OpenStreetMap), also supported is
+                          ;; :wms type
+                          :layers [{:type        :tile
+                                    :url         "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+                                    :attribution "'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>"}]
 
-                         ;; thickness of the line
-                        :line line}]]]]))
+                          ;; thickness of the line
+                          :line   line}]]]]))
 
 
