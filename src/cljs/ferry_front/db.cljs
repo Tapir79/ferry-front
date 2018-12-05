@@ -10,7 +10,8 @@
    :linesegments nil
    ; :sodra :norra :tvar
    :chosen-line-geom nil
-   :line nil
-   :booking-line nil
+   :line 0
+   :booking-line 0
    :booking-arrival-stop nil
    :booking-departure-stop nil})
+

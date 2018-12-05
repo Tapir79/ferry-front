@@ -138,16 +138,16 @@
         ;;(.log js/console "L.tileLayer = " layer)
         (.addTo layer leaflet)))
 
-    (doseq [{:keys [type url color linejoin weight] :as layer-spec} highlight-json]
+    (doseq [{:keys [type url color linejoin weight opacity] :as layer-spec} highlight-json]
       #_(println "type" type)
       (let [layer (case type
                     :json (js/L.geoJson
                             (.parse js/JSON url)
                             (clj->js {:style
-                                      {:color    "yellow"
-                                       :linejoin "round"
-                                       :weight   3
-                                       :opacity  0.80}})))]
+                                      {:color    color
+                                       :linejoin linejoin
+                                       :weight   weight
+                                       :opacity  opacity}})))]
         ;;(.log js/console "L.tileLayer = " layer)
 
         (.addTo layer leaflet)))
