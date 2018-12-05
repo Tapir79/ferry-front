@@ -39,27 +39,33 @@
              :weight   3
              :opacity  0.50}])
 
+(def json-transparent [{:type     :json
+                        :url      tvar-linjen-json
+                        :color    "#200080"
+                        :linejoin "round"
+                        :weight   0
+                        :opacity  0.00}])
 
 (def jsons-norra [{:type     :json
                    :url      norra-linjen-json
-                   :color    "#400081"
+                   :color    "yellow"
                    :linejoin "round"
-                   :weight   3
-                   :opacity  0.50}])
+                   :weight   4
+                   :opacity  0.65}])
 
 (def jsons-sodra [{:type     :json
                    :url      sodra-linjen-json
-                   :color    "#200080"
+                   :color    "yellow"
                    :linejoin "round"
-                   :weight   3
-                   :opacity  0.50}])
+                   :weight   4
+                   :opacity  0.65}])
 
 (def jsons-tvar [{:type     :json
-                   :url      tvar-linjen-json
-                   :color    "#200080"
-                   :linejoin "round"
-                   :weight   3
-                   :opacity  0.50}])
+                  :url      tvar-linjen-json
+                  :color    "yellow"
+                  :linejoin "round"
+                  :weight   4
+                  :opacity  0.65}])
 
 
 ;; geometriat json-objekteista
@@ -149,10 +155,12 @@
                                :attribution "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"}]
                  :base-jsons jsons
                  :jsons      (cond
-                               (>= line 1) jsons-norra
-                               (>= line 2) jsons-sodra
-                               (>= line 3) jsons-tvar
-                               :else nil)
+                               (<= line 0) json-transparent
+                               (<= line 1) jsons-norra
+                               (<= line 2) jsons-sodra
+                               (<= line 3) jsons-tvar
+                               (<= line 4) jsons-tvar
+                               :else json-transparent)
                  :line-color line-color}]
 
 
