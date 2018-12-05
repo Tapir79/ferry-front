@@ -5,7 +5,6 @@
     [ferry-front.views.header :refer [header]]
     [ferry-front.views.navigation :refer [main-navigation]]
     [ferry-front.views.booking-form :as booking-form]
-    [ferry-front.leaflet.basic-map :as basic-map]
     [ferry-front.leaflet.core :refer [leaflet]]))
 
 
@@ -68,63 +67,6 @@
                   :opacity  0.65}])
 
 
-;; geometriat json-objekteista
-;; json-objektista clojuremapiksi
-;; mapista geometria
-;; geometriasta coordinates
-;; koordinaatit atomiin
-
-
-
-(def geometries (atom [{:type        :polygon
-                        :coordinates [[60.24526400957346
-                                       20.323333740234375]
-                                      [60.2111688671788
-                                       20.75746826171875]
-                                      [60.24049282458596
-                                       20.466156005859375]
-                                      [60.24526400957346
-                                       20.323333740234375]]}
-
-                       #_{:type        :line
-                          :coordinates [[60.256166965894586
-                                         20.71746826171875]
-                                        [60.256166965894586
-                                         20.73746826171875]]}]))
-
-
-(def geometries2 (atom [{:type        :polygon
-                         :coordinates [[60.24526400957346
-                                        20.323333740234375]
-                                       [60.2111688671788
-                                        20.75746826171875]
-                                       [60.24049282458596
-                                        20.466156005859375]
-                                       [60.24526400957346
-                                        20.323333740234375]]}
-
-                        #_{:type        :line
-                           :coordinates [[60.256166965894586
-                                          20.71746826171875]
-                                         [60.256166965894586
-                                          20.73746826171875]]}]))
-
-(def geometries3 (atom [{:type        :polygon
-                         :coordinates [[60.24526400957346
-                                        20.323333740234375]
-                                       [60.2111688671788
-                                        20.75746826171875]
-                                       [60.24049282458596
-                                        20.466156005859375]
-                                       [60.24526400957346
-                                        20.323333740234375]]}
-
-                        #_{:type        :line
-                           :coordinates [[60.256166965894586
-                                          20.71746826171875]
-                                         [60.256166965894586
-                                          20.73746826171875]]}]))
-
 (def view-position (atom [59.75
                           21.00]))
 (def zoom-level (atom 9))
@@ -175,24 +117,6 @@
         [:button {:on-click #(swap! view-position update-in [0] - 0.2)} "down"]
         [:button {:on-click #(swap! zoom-level inc)} "zoom in"]
         [:button {:on-click #(swap! zoom-level dec)} "zoom out"]
-        ]
-
-
-
-
-       #_[basic-map/home {:id     "mapbox.streets"
-                          :width  "800px"
-                          :height "600px"                   ;; set width/height as CSS units
-                          :view   4                         ;; map center position
-                          :zoom   5                         ;; map zoom level
-
-                          ;; The actual map data (tile layers from OpenStreetMap), also supported is
-                          ;; :wms type
-                          :layers [{:type        :tile
-                                    :url         "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-                                    :attribution "'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>"}]
-
-                          ;; thickness of the line
-                          :line   line}]]]]))
+        ]]]]))
 
 
