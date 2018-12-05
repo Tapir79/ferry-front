@@ -1,11 +1,11 @@
-(ns ferry-front.leaflet.core
+(ns ferry-front.leaflet.core2
   (:require [reagent.core :as reagent :refer [atom]]))
 
 ;;;;;;;;;
 ;; Define the React lifecycle callbacks to manage the LeafletJS
 ;; Javascript objects.
 
-#_(declare update-leaflet-geometries)
+(declare update-leaflet-geometries)
 (declare update-leaflet-json-layers)
 
 (defn- leaflet-did-mount [this]
@@ -57,8 +57,12 @@
 
     ;;(.log js/console "L.map = " leaflet)
     (reagent/set-state this {:leaflet        leaflet
-                             :geometries-map {}
-                             :jsons-map      {}})
+                             :geometries-map {}})
+
+    ;; If mapspec defines callbacks, bind them to leaflet
+    (when-let [on-click (:on-click mapspec)]
+      (.on leaflet "click" (fn [e]
+                             (on-click [(-> e .-latlng .-lat) (-> e .-latlng .-lng)]))))
 
     ;; Add callback for leaflet pos/zoom changes
     ;; watcher for pos/zoom atoms
@@ -76,14 +80,22 @@
                  (when (not= old-zoom new-zoom)
                    (.setZoom leaflet new-zoom))))
 
+
+    ;; If the mapspec has an atom containing geometries, add watcher
+    ;; so that we update all LeafletJS objects
+    (when-let [g (:geometries mapspec)]
+      (add-watch g ::geometries-update
+                 (fn [_ _ _ new-geometries]
+                   (update-leaflet-geometries this new-geometries))))
+
     (when-let [g (:jsons mapspec)]
       (add-watch g ::layers-update
                  (fn [_ _ _ new-layers]
                    (update-leaflet-json-layers this new-layers))))))
 
-
 (defn- leaflet-will-update [this old-state new-state]
-  (update-leaflet-json-layers this old-state))
+  (update-leaflet-geometries this (-> this reagent/state :mapspec :geometries deref))
+  (update-leaflet-json-layers this (-> this reagent/state :mapspec :jsons)))
 
 (defn- leaflet-render [this]
   (let [mapspec (-> this reagent/state :mapspec)]
@@ -91,69 +103,95 @@
            :style {:width  (:width mapspec)
                    :height (:height mapspec)}}]))
 
+;;;;;;;;;;
+;; Code to sync ClojureScript geometries vector data to LeafletJS
+;; shape objects.
 
-(defn- update-leaflet-json-layers [this old-state]
-  (let [{:keys [leaflet]} (reagent/state this)
-        this-state (reagent/state this)
-        mapspec (:mapspec this-state)
-        base-jsons (:base-jsons mapspec)
-        old-highlight-json (:jsons mapspec)
-        highlight-json (:jsons (second old-state))]
+(defmulti create-shape :type)
 
-    #_#_#_#_leaflet (:leaflet (reagent/state this))
+(defmethod create-shape :polygon [{:keys [coordinates]}]
+  (js/L.polygon (clj->js coordinates)
+                #js {:color       "red"
+                     :fillOpacity 0.5}))
 
-    previous-state (reagent/state old-state)
-    #_(doseq [x old-state]
-        (println "old:state x:" x))
+(defmethod create-shape :line [{:keys [coordinates]}]
+  (js/L.polyline (clj->js coordinates)
+                 #js {:color "blue"}))
 
-    (println "base-jsons" base-jsons)
-    (println "highlight-jsons" old-highlight-json)
-    (println "highlight-json" highlight-json)
+(defmethod create-shape :point [{:keys [coordinates]}]
+  (js/L.circle (clj->js (first coordinates))
+               10
+               #js {:color "green"}))
 
-
-    #_(println "old-state" old-state)
-
-
-
-
-    (doseq [removed old-highlight-json]
+(defn- update-leaflet-geometries [component geometries]
+  "Update the LeafletJS layers based on the data, mutates the LeafletJS map object."
+  (let [{:keys [leaflet geometries-map]} (reagent/state component)
+        geometries-set (into #{} geometries)]
+    ;; Remove all LeafletJS shape objects that are no longer in the new geometries
+    (doseq [removed (keep (fn [[geom shape]]
+                            (when-not (geometries-set geom)
+                              shape))
+                          geometries-map)]
       ;;(.log js/console "Removed: " removed)
       (println "removed layer" removed)
       (.removeLayer leaflet removed))
 
+    ;; Create new shapes for new geometries and update the geometries map
+    (loop [new-geometries-map {}
+           [geom & geometries] geometries]
+      (if-not geom
+        ;; Update component state with the new geometries map
+        (reagent/set-state component {:geometries-map new-geometries-map})
+        (if-let [existing-shape (geometries-map geom)]
+          ;; Have existing shape, don't need to do anything
+          (recur (assoc new-geometries-map geom existing-shape) geometries)
 
-    ; let's add the now highlighted json to state
-    (reagent/set-state this {:jsons highlight-json})
+          ;; No existing shape, create a new shape and add it to the map
+          (let [shape (create-shape geom)]
+            ;;(.log js/console "Added: " (pr-str geom))
+            (.addTo shape leaflet)
+            (recur (assoc new-geometries-map geom shape) geometries)))))))
 
-    (doseq [{:keys [type url color linejoin weight] :as layer-spec} base-jsons]
-      #_(println "type" type)
+
+(defn- update-leaflet-json-layers [component layers]
+  "Update the LeafletJS layers based on the data, mutates the LeafletJS map object."
+  (let [{:keys [leaflet]} (reagent/state component)
+        mapspec (:mapspec (reagent/state component))
+        leaflet (js/L.map (:id mapspec))
+        url (get-in layers [:url])]
+
+    #_#_#_(println "component" (reagent/state component))
+        (println "url" url)
+        (println "layers-set" layers)
+
+
+    #_(doseq [x layers]
+        (println "x layers" (:url x)))
+
+
+    (doseq [x layers]
+      (let [layer (:url x)]
+        ;;(.log js/console "L.tileLayer = " layer)
+        (println "removing" layer)
+        ))
+
+    (js/L.clearLayers leaflet)
+
+    (doseq [{:keys [type url] :as layer-spec} (:jsons mapspec)]
       (let [layer (case type
                     :json (js/L.geoJson
                             (.parse js/JSON url)
                             (clj->js {:style
-                                      {:color    color
-                                       :linejoin linejoin
-                                       :weight   weight
+                                      {:color    "#400080"
+                                       :linejoin "round"
+                                       :weight   2
                                        :opacity  0.50}})))]
         ;;(.log js/console "L.tileLayer = " layer)
         (.addTo layer leaflet)))
 
-    (doseq [{:keys [type url color linejoin weight] :as layer-spec} highlight-json]
-      #_(println "type" type)
-      (let [layer (case type
-                    :json (js/L.geoJson
-                            (.parse js/JSON url)
-                            (clj->js {:style
-                                      {:color    "yellow"
-                                       :linejoin "round"
-                                       :weight   3
-                                       :opacity  0.80}})))]
-        ;;(.log js/console "L.tileLayer = " layer)
-
-        (.addTo layer leaflet)))
-
+    (reagent/set-state component {:leaflet        leaflet
+                                  :geometries-map {}})
     ))
-
 
 ;;;;;;;;;
 ;; The LeafletJS Reagent component.
@@ -164,10 +202,4 @@
     {:get-initial-state     (fn [_] {:mapspec mapspec})
      :component-did-mount   leaflet-did-mount
      :component-will-update leaflet-will-update
-
-     #_#_:component-will-update (fn [this old-argv]         ;; reagent provides you the entire "argv", not just the "props"
-                                  (let [new-argv (rest (reagent/argv this))]
-                                    (leaflet-will-update new-argv old-argv)
-                                    ))
-
      :render                leaflet-render}))

@@ -1,12 +1,12 @@
 (ns ferry-front.views
   (:require
-   [re-frame.core :as re-frame]
-   [ferry-front.subs :as subs]
-   [ferry-front.views.header :refer [header]]
-   [ferry-front.views.navigation :refer [main-navigation]]
-   [ferry-front.views.booking-form :as booking-form]
-   [ferry-front.leaflet.basic-map :as basic-map]
-   [ferry-front.leaflet.core :refer [leaflet]]))
+    [re-frame.core :as re-frame]
+    [ferry-front.subs :as subs]
+    [ferry-front.views.header :refer [header]]
+    [ferry-front.views.navigation :refer [main-navigation]]
+    [ferry-front.views.booking-form :as booking-form]
+    [ferry-front.leaflet.basic-map :as basic-map]
+    [ferry-front.leaflet.core :refer [leaflet]]))
 
 
 
@@ -20,72 +20,140 @@
 
 (defonce app-state (atom {:text "Svg test!" :fill-number 0 :url sodra-linjen-json}))
 
-(def jsons [{:type :json
-             :url sodra-linjen-json
-             :color    "#200080"
+(def jsons [{:type     :json
+             :url      sodra-linjen-json
+             :color    "red"
              :linejoin "round"
              :weight   3
              :opacity  0.50}
-            {:type :json
-             :url norra-linjen-json
-             :color    "#400081"
+            {:type     :json
+             :url      norra-linjen-json
+             :color    "blue"
              :linejoin "round"
              :weight   3
              :opacity  0.50}
-            {:type :json
-             :url tvar-linjen-json
-             :color    "#400082"
+            {:type     :json
+             :url      tvar-linjen-json
+             :color    "orange"
              :linejoin "round"
              :weight   3
              :opacity  0.50}])
 
-(def geometries (atom [{:type :polygon
-                        :coordinates [[61.256166965894586
-                                       20.71746826171875]
-                                      [60.236166965894586
+
+(def jsons-norra [{:type     :json
+                   :url      norra-linjen-json
+                   :color    "#400081"
+                   :linejoin "round"
+                   :weight   3
+                   :opacity  0.50}])
+
+(def jsons-sodra [{:type     :json
+                   :url      sodra-linjen-json
+                   :color    "#200080"
+                   :linejoin "round"
+                   :weight   3
+                   :opacity  0.50}])
+
+(def jsons-tvar [{:type     :json
+                   :url      tvar-linjen-json
+                   :color    "#200080"
+                   :linejoin "round"
+                   :weight   3
+                   :opacity  0.50}])
+
+
+;; geometriat json-objekteista
+;; json-objektista clojuremapiksi
+;; mapista geometria
+;; geometriasta coordinates
+;; koordinaatit atomiin
+
+
+
+(def geometries (atom [{:type        :polygon
+                        :coordinates [[60.24526400957346
+                                       20.323333740234375]
+                                      [60.2111688671788
                                        20.75746826171875]
-                                      [60.246166965894586
-                                       20.72746826171875]]}
+                                      [60.24049282458596
+                                       20.466156005859375]
+                                      [60.24526400957346
+                                       20.323333740234375]]}
 
-                       {:type :line
-                        :coordinates [[60.256166965894586
-                                       20.71746826171875]
-                                      [60.256166965894586
-                                       20.73746826171875]]}]))
+                       #_{:type        :line
+                          :coordinates [[60.256166965894586
+                                         20.71746826171875]
+                                        [60.256166965894586
+                                         20.73746826171875]]}]))
 
-(def view-position (atom [60.256166965894586
-                          20.71746826171875]))
-(def zoom-level (atom 8))
 
+(def geometries2 (atom [{:type        :polygon
+                         :coordinates [[60.24526400957346
+                                        20.323333740234375]
+                                       [60.2111688671788
+                                        20.75746826171875]
+                                       [60.24049282458596
+                                        20.466156005859375]
+                                       [60.24526400957346
+                                        20.323333740234375]]}
+
+                        #_{:type        :line
+                           :coordinates [[60.256166965894586
+                                          20.71746826171875]
+                                         [60.256166965894586
+                                          20.73746826171875]]}]))
+
+(def geometries3 (atom [{:type        :polygon
+                         :coordinates [[60.24526400957346
+                                        20.323333740234375]
+                                       [60.2111688671788
+                                        20.75746826171875]
+                                       [60.24049282458596
+                                        20.466156005859375]
+                                       [60.24526400957346
+                                        20.323333740234375]]}
+
+                        #_{:type        :line
+                           :coordinates [[60.256166965894586
+                                          20.71746826171875]
+                                         [60.256166965894586
+                                          20.73746826171875]]}]))
+
+(def view-position (atom [59.75
+                          21.00]))
+(def zoom-level (atom 9))
 
 
 
 (defn main-panel []
   (let [line @(re-frame/subscribe [::subs/line])
-        drawing (atom false)]
+        drawing (atom false)
+        line-color (str "#4286f" line)]
+
+    (println "what's the line " line)
     [:div {:class "flex flex-col m-auto max-w-5xl"}
      [header]
      [main-navigation]
      [:div
       [booking-form/booking-form]
       [:div {:class "flex justify-center"}
-       [leaflet {:id "kartta"
-                 :width "100%" :height "300px" ;; set width/height as CSS units
-                 :view view-position ;; map center position
-                 :zoom zoom-level ;; map zoom level
+       [leaflet {:id         "kartta"
+                 :width      "1000px" :height "1000px"      ;; set width/height as CSS units
+                 :view       view-position                  ;; map center position
+                 :zoom       zoom-level                     ;; map zoom level
 
                  ;; The actual map data (tile layers from OpenStreetMap), also supported is
                  ;; :wms type
-                 :layers [{:type :tile
-                           :url "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-                           :attribution "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"}]
-                 :jsons jsons
-                 :line line
-                 ;; Geometry shapes to draw to the map
-                 :geometries geometries
-
-                 }
-        ]
+                 :layers     [{:type        :tile
+                               :url         "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+                               :attribution "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"}]
+                 :base-jsons jsons
+                 :jsons      (cond
+                               (>= line 1) jsons-norra
+                               (>= line 2) jsons-sodra
+                               (>= line 3) jsons-tvar
+                               :else nil)
+                 :line-color line-color}]
 
 
 
@@ -104,19 +172,19 @@
 
 
 
-       #_[basic-map/home {:id "mapbox.streets"
-                         :width "800px"
-                         :height "600px" ;; set width/height as CSS units
-                         :view 4 ;; map center position
-                         :zoom 5 ;; map zoom level
+       #_[basic-map/home {:id     "mapbox.streets"
+                          :width  "800px"
+                          :height "600px"                   ;; set width/height as CSS units
+                          :view   4                         ;; map center position
+                          :zoom   5                         ;; map zoom level
 
-                         ;; The actual map data (tile layers from OpenStreetMap), also supported is
-                         ;; :wms type
-                         :layers [{:type :tile
-                                   :url "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-                                   :attribution "'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>"}]
+                          ;; The actual map data (tile layers from OpenStreetMap), also supported is
+                          ;; :wms type
+                          :layers [{:type        :tile
+                                    :url         "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+                                    :attribution "'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>"}]
 
-                         ;; thickness of the line
-                        :line line}]]]]))
+                          ;; thickness of the line
+                          :line   line}]]]]))
 
 
