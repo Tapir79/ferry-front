@@ -6,10 +6,11 @@
    [ferry-front.events :as events]
    [ferry-front.views :as views]
    [ferry-front.config :as config]
+   [ferry-front.components.loader :refer [compass-loader]]
    [ferry-front.styles.global :refer [init-global-styles]]))
 
 
-(re-frame.core/reg-sub   ;; we can check if there is data
+(re-frame/reg-sub   ;; we can check if there is data
   :initialised?          ;; usage (subscribe [:initialised?])
   (fn  [db _]
     (and (not (nil? (:linesegments db)))
@@ -20,11 +21,15 @@
     (enable-console-print!)
     (println "dev mode")))
 
+(defn main-loader []
+  [:div {:class "flex justify-center items-center h-screen w-screen"}
+   (compass-loader)])
+
 (defn top-panel    ;; this is new
   []
-  (let [ready?  (re-frame.core/subscribe [:initialised?])]
+  (let [ready?  (re-frame/subscribe [:initialised?])]
     (if-not @ready?         ;; do we have good data?
-      [:div "Initialising ..."]   ;; tell them we are working on it
+      (main-loader)   ;; tell them we are working on it
       [views/main-panel])))
 
 (defn mount-root []
