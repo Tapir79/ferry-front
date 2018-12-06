@@ -2,8 +2,6 @@
   (:require
    [re-frame.core :as re-frame]
    [ferry-front.subs :as subs]
-   [ferry-front.views.header :refer [header]]
-   [ferry-front.views.navigation :refer [main-navigation]]
    [ferry-front.views.booking-form :as booking-form]
    [ferry-front.views.timetables :as timetables]
 
@@ -79,10 +77,7 @@
         line-color (str "#4286f" line)]
 
     (println "what's the line " line)
-    [:div {:class "flex flex-col m-auto max-w-5xl"}
-     [header]
-     [main-navigation]
-     [:div
+      [:div
       [booking-form/booking-form]
       [timetables/booking-timetable]
       [:div {:class "flex justify-center"}
@@ -118,6 +113,8 @@
         [:button {:on-click #(swap! view-position update-in [0] - 0.2)} "down"]
         [:button {:on-click #(swap! zoom-level inc)} "zoom in"]
         [:button {:on-click #(swap! zoom-level dec)} "zoom out"]
-        ]]]]))
+        ]]]))
 
+(defn test-view []
+  [:div {:class "bg-red"} "TEST VIEW!"])
 
