@@ -4,10 +4,10 @@
    [re-frame.core :as re-frame]
    [stylefy.core :as stylefy]
    [ferry-front.events :as events]
-   [ferry-front.views :as views]
    [ferry-front.config :as config]
-   [ferry-front.components.loader :refer [compass-loader]]
-   [ferry-front.styles.global :refer [init-global-styles]]))
+   [ferry-front.styles.global :refer [init-global-styles]]
+   [ferry-front.views.header :refer [header]]
+   [ferry-front.views.navigation :refer [main-navigation init-routes!]]))
 
 
 (re-frame/reg-sub   ;; we can check if there is data
@@ -21,22 +21,18 @@
     (enable-console-print!)
     (println "dev mode")))
 
-(defn main-loader []
-  [:div {:class "flex justify-center items-center h-screen w-screen"}
-   (compass-loader)])
+(defn main-page []
+  [:div {:class "flex flex-col m-auto max-w-5xl"}
+   [header]
+   [main-navigation]
+  ])
 
-(defn top-panel    ;; this is new
-  []
-  (let [ready?  (re-frame/subscribe [:initialised?])]
-    (if-not @ready?         ;; do we have good data?
-      (main-loader)   ;; tell them we are working on it
-      [views/main-panel])))
 
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
   (re-frame/dispatch [::events/initialize-db])
-  (println "At core")
-  (reagent/render [top-panel]
+  (init-routes!)
+  (reagent/render [main-page]
                   (.getElementById js/document "app")))
 
 (defn ^:export init []

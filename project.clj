@@ -6,7 +6,10 @@
                  [day8.re-frame/re-frame-10x "0.3.3"]
                  [day8.re-frame/http-fx "0.1.6"]
                  [cljs-ajax "0.7.5"]
-                 [stylefy "1.10.1"]]
+                 [stylefy "1.10.1"]
+                 [metosin/reitit-core "0.2.9"]
+                 [metosin/reitit-schema "0.2.9"]
+                 [metosin/reitit-frontend "0.2.9"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 

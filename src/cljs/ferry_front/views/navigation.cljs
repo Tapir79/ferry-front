@@ -1,13 +1,64 @@
-(ns ferry-front.views.navigation)
+(ns ferry-front.views.navigation
+  (:require
+    [reagent.core :as reagent]
+    [re-frame.core :as re-frame]
+    [reitit.frontend :as reitit]
+    [reitit.frontend.easy :as rfe]
+    [reitit.coercion :as rc]
+    [reitit.coercion.schema :as rsc]
+    [ferry-front.views :as views]
+    [ferry-front.components.loader :refer [compass-loader]]))
+
+(defonce match (reagent/atom nil))
+
+(defonce link-style "no-underline cursor-pointer hover:text-white text-grey-light")
 
   (defn main-navigation []
-    [:nav {:class "p-1 mb-1 sm:ml-2 lg:ml-4"}
-     [:ul {:class "list-reset flex text-grey-light font-medium flex flex-wrap"}
+    [:nav
+     [:ul {:class "list-reset p-1 sm:ml-2 lg:ml-4 flex font-medium flex flex-wrap"}
       [:li {:class "mr-2 sm:mr-6"}
-       [:a {:class "text-white cursor-pointer"} "Booking"]]
+       [:a {:href (rfe/href ::booking)
+            :class (str link-style " text-white")} "Booking"]]
       [:li {:class "mr-2 sm:mr-6"}
-       [:a {:class "cursor-pointer hover:text-white"} "Timetables"]]
+       [:a {:href (rfe/href ::route-test)
+            :class link-style} "Timetables"]]
       [:li {:class "mr-2 sm:mr-6"}
-       [:a {:class "cursor-pointer hover:text-white"} "Analysis"]]
+       [:a {:href (rfe/href ::route-test)
+            :class link-style} "Analysis"]]
       [:li {:class "mr-2 sm:mr-6"}
-       [:a {:class "cursor-pointer hover:text-white"} "Something"]]]])
+       [:a {:href (rfe/href ::route-test)
+            :class link-style} "Something"]]]
+     (if @match
+       (let [view (:view (:data @match))]
+         [view @match]))])
+
+(defn main-loader []
+  [:div {:class "flex justify-center items-center h-screen w-screen"}
+   (compass-loader)])
+
+(defn top-panel    ;; this is new
+  []
+  (let [ready?  (re-frame/subscribe [:initialised?])]
+    (if-not @ready?         ;; do we have good data?
+      (main-loader)   ;; tell them we are working on it
+      [views/main-panel])))
+
+
+(defn route-test []
+  [views/test-view])
+
+(def routes
+  (reitit/router
+    ["/"
+     [""
+      {:name ::booking
+       :view top-panel}]
+     ["route-test"
+      {:name ::route-test
+       :view route-test}]]
+    {:data {:coercion rsc/coercion}}))
+
+(defn init-routes! []
+  (rfe/start! routes
+              (fn [m] (reset! match m))
+              {:use-fragment true}))
