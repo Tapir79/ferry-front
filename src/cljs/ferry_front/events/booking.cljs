@@ -42,3 +42,22 @@
                   :on-failure [::ae/http-request-failed]}})
 
 (rf/reg-event-fx ::search-click handle-search-click)
+
+(rf/reg-event-db
+  ::select-route
+  (fn [db [_ route]]
+    (assoc db :booking-selected-route route)))
+
+(rf/reg-event-fx
+  ::book-trip
+  (fn [{:keys [db]} _]
+    (println "selectedtrip" (:booking-selected-route db))
+    {:db         db
+     :http-xhrio {:method          :post
+                  :uri             (str "http://localhost:8080/bookings")
+                  :params          (:booking-selected-route db)
+                  :timeout         8000
+                  :format          (ajax/json-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success      [::update-test-state]
+                  :on-failure      [::http-request-failed]}}))

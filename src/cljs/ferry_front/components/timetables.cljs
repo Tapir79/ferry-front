@@ -2,9 +2,10 @@
   (:require [re-frame.core :as rf]
             [ferry-front.subs.booking :as s-booking]
             [stylefy.core :as stylefy]
-            [cljs-time.core :as time]
             [cljs-time.format :as tf]
-            [ferry-front.styles.global :refer [mobile-width]]))
+            [reitit.frontend.easy :as rfe]
+            [ferry-front.styles.global :refer [mobile-width]]
+            [ferry-front.events.booking :as e-booking]))
 
 
 (def date-style {:flex "0 0 12.5%" :text-align "left"})
@@ -30,6 +31,10 @@
 (defn get-status-color [unit]
   "rounded-full border-solid border-green text-grey-darker border-2 mx-1 h-8 w-8 flex justify-center items-center")
 
+(defn handle-route-click [route]
+  (rf/dispatch[::e-booking/select-route route])
+  (rfe/push-state :confirm-booking))
+
 (defn reservation-status [route]
   [:div {:class "flex justify-center"}
    [:div {:class (get-status-color (:cars route))}
@@ -48,7 +53,9 @@
      [:div (stylefy/use-style vessel-style) "Vessel"]
      [:div (stylefy/use-style status-style) "Booking status"]]
     (for [route @stop-routes]
-      [:li {:key (:segment_id route) :class (str row-style-str item-row-style-str)}
+      [:li {:key (:segment_id route)
+            :class (str row-style-str item-row-style-str)
+            :on-click #(handle-route-click route) }
        [:div (stylefy/use-style date-style) (timestamp-to-date (:start_time route))]
        [:div (stylefy/use-style time-style) (timestamp-to-time (:start_time route))
         [:i {:class "ml-1 fas fa-arrow-right text-sm text-grey-darker"}]]
