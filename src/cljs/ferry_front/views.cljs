@@ -2,8 +2,7 @@
   (:require
    [re-frame.core :as re-frame]
    [ferry-front.subs :as subs]
-   [ferry-front.views.booking-form :as booking-form]
-   [ferry-front.views.timetables :as timetables]
+   [ferry-front.views.booking :refer [booking]]
 
    [ferry-front.leaflet.core :refer [leaflet]]))
 
@@ -78,8 +77,7 @@
 
     (println "what's the line " line)
       [:div
-      [booking-form/booking-form]
-      [timetables/booking-timetable]
+      [booking]
       [:div {:class "flex justify-center"}
        [leaflet {:id         "kartta"
                  :width      "1000px" :height "1000px"      ;; set width/height as CSS units
