@@ -3,6 +3,11 @@
    [re-frame.core :as re-frame]
    [ferry-front.subs :as subs]
    [ferry-front.views.booking :refer [booking-main]]
+   [ferry-front.leaflet.core :refer [leaflet]]
+    [re-frame.core :as re-frame]
+    [ferry-front.subs :as subs]
+    #_[ferry-front.views.header :refer [header]]
+    #_[ferry-front.views.navigation :refer [main-navigation]]
    [ferry-front.leaflet.core :refer [leaflet]]))
 
 
@@ -18,22 +23,42 @@
 
 (def jsons [{:type     :json
              :url      sodra-linjen-json
+             :color    "black"
+             :linejoin "round"
+             :weight   5
+             :opacity  0.90}
+            {:type     :json
+             :url      norra-linjen-json
+             :color    "black"
+             :linejoin "round"
+             :weight   5
+             :opacity  0.50}
+            {:type     :json
+             :url      tvar-linjen-json
+             :color    "black"
+             :linejoin "round"
+             :weight   5
+             :opacity  0.50}
+
+            {:type     :json
+             :url      sodra-linjen-json
              :color    "red"
              :linejoin "round"
-             :weight   3
-             :opacity  0.50}
+             :weight   4
+             :opacity  1.00}
             {:type     :json
              :url      norra-linjen-json
              :color    "blue"
              :linejoin "round"
-             :weight   3
-             :opacity  0.50}
+             :weight   4
+             :opacity  1.00}
             {:type     :json
              :url      tvar-linjen-json
              :color    "orange"
              :linejoin "round"
-             :weight   3
-             :opacity  0.50}])
+             :weight   4
+             :opacity  1.00}
+            ])
 
 (def json-transparent [{:type     :json
                         :url      tvar-linjen-json
@@ -46,23 +71,35 @@
                    :url      norra-linjen-json
                    :color    "yellow"
                    :linejoin "round"
-                   :weight   4
-                   :opacity  0.65}])
+                   :weight   6
+                   :opacity  0.75}])
 
 (def jsons-sodra [{:type     :json
                    :url      sodra-linjen-json
                    :color    "yellow"
                    :linejoin "round"
-                   :weight   4
-                   :opacity  0.65}])
+                   :weight   6
+                   :opacity  0.75}])
 
 (def jsons-tvar [{:type     :json
                   :url      tvar-linjen-json
                   :color    "yellow"
                   :linejoin "round"
-                  :weight   4
-                  :opacity  0.65}])
+                  :weight   6
+                  :opacity  0.75}])
 
+(defn jsons-route-highlight [json]
+  [{:type     :json
+    :url      json
+    :color    "yellow"
+    :linejoin "round"
+    :weight   6
+    :opacity  0.75}])
+
+(defn choose-highlight-json [arrival-stop departure-stop line-segments]
+  "loop line-segments and return the one that matches arrival an departure stops"
+  #_(for [x line-segments] (println "line-segment x:" x))
+  )
 
 (def view-position (atom [59.75
                           21.00]))
@@ -72,7 +109,12 @@
 
 (defn main-panel []
   (let [line @(re-frame/subscribe [::subs/booking-line])
-        line-color (str "#4286f" line)]
+        stops @(re-frame/subscribe [::subs/stops])
+        line-segments @(re-frame/subscribe [::subs/line-segments])
+        departure-stop @(re-frame/subscribe [::subs/booking-departure-stop])
+        arrival-stop @(re-frame/subscribe [::subs/booking-arrival-stop])
+        #_#_line-color (str "#4286f" line)]
+
 
     (println "what's the line " line)
       [:div
@@ -88,6 +130,7 @@
                  :layers     [{:type        :tile
                                :url         "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
                                :attribution "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"}]
+                 :stops stops
                  :base-jsons jsons
                  :jsons      (cond
                                (<= line 0) json-transparent
@@ -96,12 +139,10 @@
                                (<= line 3) jsons-tvar
                                (<= line 4) jsons-tvar
                                :else json-transparent)
-                 :line-color line-color}]
+                 :highlight-json (choose-highlight-json arrival-stop departure-stop line-segments)
+                 #_#_:line-color line-color}]
 
-
-
-
-       [:div.actions
+       #_[:div.actions
         "Control the map position/zoom by swap!ing the atoms"
         [:br]
         [:button {:on-click #(swap! view-position update-in [1] - 0.2)} "left"]
@@ -110,7 +151,8 @@
         [:button {:on-click #(swap! view-position update-in [0] - 0.2)} "down"]
         [:button {:on-click #(swap! zoom-level inc)} "zoom in"]
         [:button {:on-click #(swap! zoom-level dec)} "zoom out"]
-        ]]]))
+        ]
+       ]]))
 
 (defn test-view []
   [:div {:class "bg-red"} "TEST VIEW!"])

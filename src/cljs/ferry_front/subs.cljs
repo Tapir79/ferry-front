@@ -22,17 +22,14 @@
 ;;;; lines subs
 
 (re-frame/reg-sub
+  ::booking-line
+  (fn [db]
+    (:booking-line db)))
+
+(re-frame/reg-sub
   ::lines
   (fn [db]
     (:lines db)))
-
-;;;; stops subs
-
-(re-frame/reg-sub
-  ::stops
-  (fn [db]
-    (:stops db)))
-
 
 (re-frame/reg-sub
   ::line
@@ -40,14 +37,27 @@
     (:line db)))
 
 (re-frame/reg-sub
-  ::booking-line
-  (fn [db]
-    (:booking-line db)))
-
-(re-frame/reg-sub
-  ::linesegments
+  ::line-segments
   (fn [db]
     (:linesegments db)))
+
+;;;; stops subs
+
+(re-frame/reg-sub
+  ::booking-departure-stop
+  (fn [db]
+    (:booking-departure-stop db)))
+
+(re-frame/reg-sub
+  ::booking-arrival-stop
+  (fn [db]
+    (:booking-arrival-stop db)))
+
+
+(re-frame/reg-sub
+  ::stops
+  (fn [db]
+    (:stops db)))
 
 ;;;; Test subs
 
@@ -60,5 +70,8 @@
   ::tests
   (fn [db]
     (:tests db)))
+
+
+
 
 
