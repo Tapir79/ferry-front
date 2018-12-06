@@ -53,11 +53,16 @@
   (fn [db]
     (:booking-arrival-stop db)))
 
-
 (re-frame/reg-sub
   ::stops
   (fn [db]
     (:stops db)))
+
+(re-frame/reg-sub
+  ::highlight-segment
+  (fn [db]
+    (:highlight-segment db)))
+
 
 ;;;; Test subs
 

@@ -5,7 +5,6 @@
 ;; Define the React lifecycle callbacks to manage the LeafletJS
 ;; Javascript objects.
 
-#_(declare update-leaflet-geometries)
 (declare update-leaflet-json-layers)
 
 (defn- leaflet-did-mount [this]
@@ -14,20 +13,15 @@
         leaflet (js/L.map (:id mapspec))
         view (:view mapspec)
         zoom (:zoom mapspec)
-        line-weight (:weight mapspec)
-        ]
+        line-weight (:weight mapspec)]
 
-    #_(println "view" line-weight)
     (.setView leaflet (clj->js @view) @zoom)
 
     (doseq [{:keys [type url] :as layer-spec} (:layers mapspec)]
-      #_(println "url" url)
-      (println "mapspec:" mapspec)
       (let [layer (case type
                     :tile (js/L.tileLayer
                             url
-                            (clj->js {:attribution (:attribution layer-spec)})
-                            )
+                            (clj->js {:attribution (:attribution layer-spec)}))
                     :json (js/L.geoJson
                             (.parse js/JSON url)
                             (clj->js {:style
@@ -40,7 +34,6 @@
         (.addTo layer leaflet)))
 
     (doseq [{:keys [type url color linejoin weight] :as layer-spec} (:jsons mapspec)]
-      #_(println "type" type)
       (let [layer (case type
                     :json (js/L.geoJson
                             (.parse js/JSON url)
@@ -49,20 +42,12 @@
                                        :linejoin linejoin
                                        :weight   line-weight
                                        :opacity  0.50}})))]
-        ;;(.log js/console "L.tileLayer = " layer)
         (.addTo layer leaflet)))
 
-    ;;(.log js/console "L.map = " leaflet)
     (reagent/set-state this {:leaflet        leaflet
                              :geometries-map {}
                              :jsons-map      {}})
 
-    ;; Add callback for leaflet pos/zoom changes
-    ;; watcher for pos/zoom atoms
-    (.on leaflet "move" (fn [e]
-                          (let [c (.getCenter leaflet)]
-                            (reset! zoom (.getZoom leaflet))
-                            (reset! view [(.-lat c) (.-lng c)]))))
     (add-watch view ::view-update
                (fn [_ _ old-view new-view]
                  ;;(.log js/console "change view: " (clj->js old-view) " => " (clj->js new-view) @zoom)
@@ -78,51 +63,46 @@
                  (fn [_ _ _ new-layers]
                    (update-leaflet-json-layers this new-layers))))))
 
-
-(defn- leaflet-will-update [this old-state new-state]
-  (update-leaflet-json-layers this old-state))
-
 (defn- leaflet-render [this]
   (let [mapspec (-> this reagent/state :mapspec)]
     [:div {:id    (:id mapspec)
            :style {:width  (:width mapspec)
                    :height (:height mapspec)}}]))
 
-
-(defn- update-leaflet-json-layers [this old-state]
+;;;;;;;;;;;
+;;;;;;;;;;;
+;; the updating happens here!
+(defn- leaflet-will-update [this old-state new-state]
+  "This updates all the geometries and other stuff"
   (let [{:keys [leaflet]} (reagent/state this)
         this-state (reagent/state this)
         mapspec (:mapspec this-state)
         base-jsons (:base-jsons mapspec)
         stops (:stops mapspec)
         old-highlight-json (:jsons mapspec)
-        highlight-json (:jsons (second old-state))]
+        highlight-json (:jsons (second old-state))
+        url-coord (second highlight-json)
+        second-url-coordinate (second url-coord)
+        second-multiline-string-coord (second second-url-coordinate)
+        parsed-coordlist (.parse js/JSON second-multiline-string-coord)
+        keywordized-coordlist (js->clj parsed-coordlist :keywordize-keys true)
+        coordinates (:coordinates keywordized-coordlist)]
 
-    #_#_#_#_leaflet (:leaflet (reagent/state this))
-
-        previous-state (reagent/state old-state)
-    #_(doseq [x old-state]
-        (println "old:state x:" x))
-
-    #_#_#_(println "base-jsons" base-jsons)
-        (println "highlight-jsons" old-highlight-json)
-        (println "highlight-json" highlight-json)
-
-
-    #_(println "old-state" old-state)
+    ;round this and you get the nth number to get the zoom-coords
+    (println "count divided by 2:" (/ (count(first coordinates)) 2))
 
 
+    ; remove the previous highlighted json layer
     (doseq [removed old-highlight-json]
-      ;;(.log js/console "Removed: " removed)
-      #_(println "removed layer" removed)
       (.removeLayer leaflet removed))
-
 
     ; let's add the now highlighted json to state
     (reagent/set-state this {:jsons highlight-json})
 
-
-    ;L.circle([37.786542, -122.386022], {
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ; Circle geometry
+    ; The javascript
+    ; L.circle([37.786542, -122.386022], {
     ;          color: "red",
     ;          fillColor: "#f03",
     ;          fillOpacity: 0.5,
@@ -135,25 +115,57 @@
                                300
                                #js {:color       "black"
                                     :fillColor   "white"
-                                    :fillOpacity 0.9
-                                    })]
-        (.addTo layer leaflet)
-        ))
+                                    :fillOpacity 0.9})]
+        (.addTo layer leaflet)))
 
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;// create custom icon
+    ;    var myIcon = L.icon({
+    ;        iconUrl: 'mypic.png',
+    ;        iconSize: [38, 95], // size of the icon
+    ;        popupAnchor: [0,-15]
+    ;        });
+    ;
+    ;    // create popup contents
+    ;    var customPopup = "Some text<br/><img src='http://joshuafrazier.info/images/maptime.gif' alt='maptime logo gif' width='350px'/>";
+    ;
+    ;    // specify popup options
+    ;    var customOptions =
+    ;        {
+    ;        'maxWidth': '30',
+    ;        'className' : 'custom'
+    ;        }
+    ;
+    ;    // create marker object, pass custom icon as option, pass content and options to popup, add to map
+    ;    L.marker([43.64701, -79.39425], {icon: myIcon}).bindPopup(customPopup,customOptions).addTo(map);
 
-    ;L.popup({ elevation: 260.0 })
+    ;<br/><img src='http://joshuafrazier.info/images/maptime.gif' alt='maptime logo gif' width='350px'/>
+    (doseq [{:keys [lat lng name] :as layer-spec} stops]
+      (let [custom-popup name
+            customOptions {:maxWidth  30
+                           :className "custom"}
+            marker (js/L.marker (clj->js [lat lng])
+                                #js {:icon (js/L.icon #js {:iconUrl "anchor7.png"})})]
+        (.bindPopup marker custom-popup customOptions)
+        (.addTo marker leaflet)))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ; Basic popup
+    ; The javascript equivalent
+    ; L.popup({ elevation: 260.0 })
     ;       .setLatLng([37.7952, -122.4028])
     ;       .setContent("Transamerica Pyramid")
     ;       .addTo(map);
 
-    (doseq [{:keys [lat lng name] :as layer-spec} stops]
-      (let [popup (js/L.popup #js {:elevation 260.0
-                                   :closeButton false
-                                   :closeOnClick false})]
-        (.setLatLng popup (clj->js [lat lng]))
-        (.setContent popup name)
-        (.addTo popup leaflet)))
+    #_(doseq [{:keys [lat lng name] :as layer-spec} stops]
+        (let [popup (js/L.popup #js {:elevation    500
+                                     :closeButton  false
+                                     :closeOnClick false})]
+          (.setLatLng popup (clj->js [lat lng]))
+          (.setContent popup name)
+          (.addTo popup leaflet)))
 
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ; base json objects - the lines
     (doseq [{:keys [type url color linejoin weight] :as layer-spec} base-jsons]
       (let [layer (case type
@@ -163,12 +175,11 @@
                                       {:color    color
                                        :linejoin linejoin
                                        :weight   weight
-                                       :opacity  0.50}}))
-
-                  )]
+                                       :opacity  0.50}})))]
         (.addTo layer leaflet)))
 
 
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ; the line to be highlighted
     (doseq [{:keys [type url color linejoin weight opacity] :as layer-spec} highlight-json]
       (let [layer (case type
@@ -178,11 +189,18 @@
                                       {:color    color
                                        :linejoin linejoin
                                        :weight   weight
-                                       :opacity  opacity}})))]
-        (.addTo layer leaflet)))
+                                       :opacity  opacity}})))
+            ]
+        (.addTo layer leaflet)
+        ))
+
+    (.setView second-multiline-string-coord 6)
+
+    ; map.setBounds(myGeojsonObject.getBounds());
+
     ))
 
-
+;;;;;;;;;
 ;;;;;;;;;
 ;; The LeafletJS Reagent component.
 

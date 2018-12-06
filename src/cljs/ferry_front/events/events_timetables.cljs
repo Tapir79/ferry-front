@@ -39,6 +39,11 @@
     (assoc db :to to)))
 
 (re-frame/reg-event-db
+  ::change-highlight-segment
+  (fn [db [_ segment]]
+    (assoc db :highlight-segment segment)))
+
+(re-frame/reg-event-db
   ::change-line-segment
   (fn [db [_ segment]]
     (assoc db :line-segment segment)))
