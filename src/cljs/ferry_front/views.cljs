@@ -6,7 +6,7 @@
    [ferry-front.views.navigation :refer [main-navigation]]
    [ferry-front.views.booking-form :as booking-form]
    [ferry-front.views.timetables :as timetables]
-   [ferry-front.leaflet.basic-map :as basic-map]
+
    [ferry-front.leaflet.core :refer [leaflet]]))
 
 
@@ -75,8 +75,7 @@
 
 
 (defn main-panel []
-  (let [line @(re-frame/subscribe [::subs/line])
-        drawing (atom false)
+  (let [line @(re-frame/subscribe [::subs/booking-line])
         line-color (str "#4286f" line)]
 
     (println "what's the line " line)

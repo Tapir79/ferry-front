@@ -40,6 +40,11 @@
     (:line db)))
 
 (re-frame/reg-sub
+  ::booking-line
+  (fn [db]
+    (:booking-line db)))
+
+(re-frame/reg-sub
   ::linesegments
   (fn [db]
     (:linesegments db)))
