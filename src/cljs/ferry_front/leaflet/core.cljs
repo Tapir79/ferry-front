@@ -154,6 +154,7 @@
         (.setContent popup name)
         (.addTo popup leaflet)))
 
+    ; base json objects - the lines
     (doseq [{:keys [type url color linejoin weight] :as layer-spec} base-jsons]
       (let [layer (case type
                     :json (js/L.geoJson
@@ -168,9 +169,8 @@
         (.addTo layer leaflet)))
 
 
+    ; the line to be highlighted
     (doseq [{:keys [type url color linejoin weight opacity] :as layer-spec} highlight-json]
-      (println "color" color)
-      (println "opacity" opacity)
       (let [layer (case type
                     :json (js/L.geoJson
                             (.parse js/JSON url)
@@ -179,10 +179,7 @@
                                        :linejoin linejoin
                                        :weight   weight
                                        :opacity  opacity}})))]
-        ;;(.log js/console "L.tileLayer = " layer)
-        #_(.bindPopUp (fn [layer] "test"))                  ;doesn't work
         (.addTo layer leaflet)))
-
     ))
 
 
