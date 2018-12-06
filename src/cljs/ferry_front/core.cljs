@@ -6,7 +6,7 @@
    [ferry-front.events :as events]
    [ferry-front.config :as config]
    [ferry-front.styles.global :refer [init-global-styles]]
-   [ferry-front.views.header :refer [header]]
+   [ferry-front.components.header :refer [header]]
    [ferry-front.views.navigation :refer [main-navigation init-routes!]]))
 
 

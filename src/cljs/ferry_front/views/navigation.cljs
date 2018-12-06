@@ -11,7 +11,7 @@
 
 (defonce match (reagent/atom nil))
 
-(defonce link-style "no-underline cursor-pointer hover:text-white text-grey-light")
+(def link-style "no-underline cursor-pointer hover:text-white text-grey-light")
 
   (defn main-navigation []
     [:nav
