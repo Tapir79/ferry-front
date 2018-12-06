@@ -42,3 +42,8 @@
                   :on-failure [::ae/http-request-failed]}})
 
 (rf/reg-event-fx ::search-click handle-search-click)
+
+(rf/reg-event-db
+  ::select-route
+  (fn [db [_ route]]
+    (assoc db :booking-selected-route route)))
