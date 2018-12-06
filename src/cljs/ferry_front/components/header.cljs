@@ -1,4 +1,4 @@
-(ns ferry-front.views.header)
+(ns ferry-front.components.header)
 
 (defn header []
   [:header

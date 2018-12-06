@@ -1,5 +1,9 @@
 (ns ferry-front.views
   (:require
+   [re-frame.core :as re-frame]
+   [ferry-front.subs :as subs]
+   [ferry-front.views.booking :refer [booking-main]]
+   [ferry-front.leaflet.core :refer [leaflet]]))
     [re-frame.core :as re-frame]
     [ferry-front.subs :as subs]
     [ferry-front.views.header :refer [header]]
@@ -106,6 +110,7 @@
 (def zoom-level (atom 9))
 
 
+
 (defn main-panel []
   (let [line @(re-frame/subscribe [::subs/booking-line])
         stops @(re-frame/subscribe [::subs/stops])
@@ -114,12 +119,10 @@
         arrival-stop @(re-frame/subscribe [::subs/booking-arrival-stop])
         #_#_line-color (str "#4286f" line)]
 
-    [:div {:class "flex flex-col m-auto max-w-5xl"}
-     [header]
-     [main-navigation]
-     [:div
-      [booking-form/booking-form]
-      [timetables/booking-timetable]
+
+    (println "what's the line " line)
+      [:div
+      [booking-main]
       [:div {:class "flex justify-center"}
        [leaflet {:id         "kartta"
                  :width      "1000px" :height "1000px"      ;; set width/height as CSS units
@@ -157,4 +160,6 @@
         [:button {:on-click #(swap! zoom-level dec)} "zoom out"]
         ]]]]))
 
+(defn test-view []
+  [:div {:class "bg-red"} "TEST VIEW!"])
 
