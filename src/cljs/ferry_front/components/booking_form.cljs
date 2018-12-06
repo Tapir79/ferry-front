@@ -1,4 +1,4 @@
-(ns ferry-front.views.booking-form
+(ns ferry-front.components.booking-form
   (:require [re-frame.core :as rf]
             [ferry-front.subs :as subs]
             [stylefy.core :as stylefy]
@@ -22,7 +22,7 @@
 
 (defn search-button []
   [:div {:class "flex-grow flex-shrink w-full sm:w-auto my-1 sm:m-1"}
-   [:button {:class "bg-blue hover:bg-blue-dark font-semibold text-white p-2 rounded w-full"
+   [:button {:class "bg-blue-darker hover:bg-blue-darkest font-semibold text-white p-2 rounded w-full"
              :type "button"
              :on-click #(rf/dispatch [::e-booking/search-click])
              } "Search"]])

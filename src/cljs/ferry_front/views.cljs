@@ -2,8 +2,7 @@
   (:require
    [re-frame.core :as re-frame]
    [ferry-front.subs :as subs]
-   [ferry-front.views.booking :refer [booking]]
-
+   [ferry-front.views.booking :refer [booking-main]]
    [ferry-front.leaflet.core :refer [leaflet]]))
 
 
@@ -77,7 +76,7 @@
 
     (println "what's the line " line)
       [:div
-      [booking]
+      [booking-main]
       [:div {:class "flex justify-center"}
        [leaflet {:id         "kartta"
                  :width      "1000px" :height "1000px"      ;; set width/height as CSS units
