@@ -21,3 +21,8 @@
   ::stop-routes
   (fn [db]
     (:stop-routes db)))
+
+(rf/reg-sub
+  ::selected-route
+  (fn [db]
+    (:booking-selected-route db)))
