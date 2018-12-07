@@ -4,12 +4,13 @@
     [re-frame.core :as re-frame]
     [reitit.frontend :as reitit]
     [reitit.frontend.easy :as rfe]
-    [reitit.coercion :as rc]
     [reitit.coercion.schema :as rsc]
-    [ferry-front.views :as views]
     [ferry-front.components.loader :refer [compass-loader]]
     [ferry-front.views.confirm-booking :as confirm-booking]
-    [ferry-front.views.analysis :as analysis]))
+    [ferry-front.views.analysis :as analysis]
+    [ferry-front.views.booking :refer [booking-main]]
+    [ferry-front.leaflet.core :refer [leaflet]]
+    [ferry-front.views.map :refer [main-map]]))
 
 (defonce match (reagent/atom nil))
 
@@ -35,32 +36,25 @@
   [:div {:class "flex justify-center items-center h-screen w-screen"}
    (compass-loader)])
 
-(defn top-panel    ;; this is new
+(defn booking-panel    ;; this is new
   []
   (let [ready?  (re-frame/subscribe [:initialised?])]
     (if-not @ready?         ;; do we have good data?
       (main-loader)   ;; tell them we are working on it
-      [views/main-panel])))
-
-
-(defn route-test []
-  [views/test-view])
-
-(defn analysis-view []
-  [analysis/chart-component])
+      [:div {:class "flex"}
+         [booking-main]
+          [:div {:class "hidden sm:block"}
+            [main-map]]])))
 
 (def routes
   (reitit/router
     ["/"
      [""
       {:name ::booking
-       :view top-panel}]
-     ["route-test"
-      {:name ::route-test
-       :view route-test}]
+       :view booking-panel}]
      ["analysis"
       {:name ::analysis
-       :view analysis-view}]
+       :view analysis/chart-component}]
      ["confirm-booking"
       {:name :confirm-booking
        :view confirm-booking/main-view}]]
