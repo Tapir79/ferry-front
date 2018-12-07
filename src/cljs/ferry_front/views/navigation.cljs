@@ -8,7 +8,8 @@
     [reitit.coercion.schema :as rsc]
     [ferry-front.views :as views]
     [ferry-front.components.loader :refer [compass-loader]]
-    [ferry-front.views.confirm-booking :as confirm-booking]))
+    [ferry-front.views.confirm-booking :as confirm-booking]
+    [ferry-front.views.analysis :as analysis]))
 
 (defonce match (reagent/atom nil))
 
@@ -24,7 +25,7 @@
        [:a {:href (rfe/href ::route-test)
             :class link-style} "Timetables"]]
       [:li {:class "mr-2 sm:mr-6"}
-       [:a {:href (rfe/href ::route-test)
+       [:a {:href (rfe/href ::analysis)
             :class link-style} "Analysis"]]]
      (if @match
        (let [view (:view (:data @match))]
@@ -45,6 +46,9 @@
 (defn route-test []
   [views/test-view])
 
+(defn analysis-view []
+  [analysis/chart-component])
+
 (def routes
   (reitit/router
     ["/"
@@ -54,6 +58,9 @@
      ["route-test"
       {:name ::route-test
        :view route-test}]
+     ["analysis"
+      {:name ::analysis
+       :view analysis-view}]
      ["confirm-booking"
       {:name :confirm-booking
        :view confirm-booking/main-view}]]

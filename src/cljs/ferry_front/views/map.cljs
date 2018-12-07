@@ -131,9 +131,7 @@
         departure-stop @(re-frame/subscribe [::subs/booking-departure-stop])
         arrival-stop @(re-frame/subscribe [::subs/booking-arrival-stop])
         do-highlight (choose-highlight-json arrival-stop departure-stop line-segments)
-        highlight-segment @(re-frame/subscribe [::subs/highlight-segment])
-        ]
-
+        highlight-segment @(re-frame/subscribe [::subs/highlight-segment])]
 
     (println "what's the departure " departure-stop)
     (println "highlight segment" highlight-segment)
@@ -158,6 +156,4 @@
                                    (<= line 4) jsons-tvar
                                    :else json-transparent)
              :jsons highlight-segment
-             #_#_:line-color line-color}]
-
-   ]))
+             #_#_:line-color line-color}]]))

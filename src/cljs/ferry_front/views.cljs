@@ -11,17 +11,19 @@
     [ferry-front.leaflet.core :refer [leaflet]]
     [clojure.string :as str]
     [ferry-front.views.map :refer [main-map]]
-    [ferry-front.views.analysis :as analysis]))
+
+
+    #_[ferry-front.views.analysis :as analysis]))
+
 
 
 (defn main-panel []
 
-    [:div
-     [booking-main]
 
-     [main-map]
-     [:div {:class "flex"}]
-     #_[analysis/analysis-main]])
+  [booking-main]
+  [main-map]
+  [:div {:class "flex"}]
+  )
 
 (defn test-view []
   [:div {:class "bg-red"}
