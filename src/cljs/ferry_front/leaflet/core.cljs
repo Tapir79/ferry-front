@@ -81,16 +81,19 @@
         stops (:stops mapspec)
         old-highlight-json (:jsons mapspec)
         highlight-json (:jsons (second old-state))
+        ;;;;;;;;;;;;;ZOOM COORDINATES;;;;;;;;;;;;;;;;;
         url-coord (second highlight-json)
         second-url-coordinate (second url-coord)
         second-multiline-string-coord (second second-url-coordinate)
         parsed-coordlist (.parse js/JSON second-multiline-string-coord)
         keywordized-coordlist (js->clj parsed-coordlist :keywordize-keys true)
-        coordinates (:coordinates keywordized-coordlist)]
-
-    ;round this and you get the nth number to get the zoom-coords
-    (println "count divided by 2:" (/ (count(first coordinates)) 2))
-
+        coordinates (:coordinates keywordized-coordlist)
+        count (count(first coordinates))
+        divided (/ count 2)
+        round (Math/round divided)
+        zoom-coords (nth (first coordinates) round)
+        lat (second zoom-coords)
+        lng (first zoom-coords)]
 
     ; remove the previous highlighted json layer
     (doseq [removed old-highlight-json]
@@ -192,9 +195,11 @@
                                        :opacity  opacity}})))
             ]
         (.addTo layer leaflet)
+
         ))
 
-    (.setView second-multiline-string-coord 6)
+
+    (.setView leaflet (clj->js [lat lng]) 12)
 
     ; map.setBounds(myGeojsonObject.getBounds());
 
