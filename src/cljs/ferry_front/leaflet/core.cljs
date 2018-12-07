@@ -199,7 +199,7 @@
         ))
 
 
-    (.setView leaflet (clj->js [lat lng]) 12)
+    #_(.setView leaflet (clj->js [lat lng]) 10)
 
     ; map.setBounds(myGeojsonObject.getBounds());
 

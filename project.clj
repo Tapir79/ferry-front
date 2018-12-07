@@ -10,7 +10,8 @@
                  [metosin/reitit-core "0.2.9"]
                  [metosin/reitit-schema "0.2.9"]
                  [metosin/reitit-frontend "0.2.9"]
-                 [com.andrewmcveigh/cljs-time "0.5.2"]]
+                 [com.andrewmcveigh/cljs-time "0.5.2"]
+                 [cljsjs/chartist "0.10.1-0"] ]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 
