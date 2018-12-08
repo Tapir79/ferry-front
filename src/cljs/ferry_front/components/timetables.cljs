@@ -44,7 +44,7 @@
     [:i {:class "fas fa-female"}]]])
 
 (defn timetable [stop-routes]
-  [:div {:class "mb-3 mx-3 bg-blue-lighter p-2 rounded"}
+  [:div {:class "bg-blue-lighter p-1 sm:p-2 rounded"}
    [:ul {:class "list-reset"}
     [:li {:class (str row-style-str " font-semibold bg-blue text-white" )}
      [:div (stylefy/use-style date-style) "Date"]

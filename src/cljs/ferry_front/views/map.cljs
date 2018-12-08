@@ -132,7 +132,7 @@
     (println "highlight segment" highlight-segment)
   [:div {:class "flex justify-center"}
    [leaflet {:id             "kartta"
-             :width          "800px" :height "500px"   ;; set width/height as CSS units
+             :width          "100%" :height "500px"   ;; set width/height as CSS units
              :view           view-position               ;; map center position
              :zoom           zoom-level                  ;; map zoom level
 
