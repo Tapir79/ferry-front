@@ -14,5 +14,6 @@
    :booking-line 0
    :booking-arrival-stop nil
    :booking-departure-stop nil
-   :booking-selected-route nil})
+   :booking-selected-route nil
+   :test-new-booking nil})
 

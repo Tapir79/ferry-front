@@ -3,9 +3,9 @@
     [cljs.core.async.macros :as asyncm :refer (go go-loop)])
   (:require
     [re-frame.core :as rf]
-    [taoensso.encore :as encore :refer (debugf)]
     [cljs.core.async :as async :refer (<! >! put! chan)]
-    [taoensso.sente  :as sente :refer (cb-success?)]))
+    [taoensso.sente  :as sente :refer (cb-success?)]
+    [ferry-front.events.booking-status :as e-booking-status]))
 
 (enable-console-print!)
 
@@ -42,7 +42,7 @@
 (defmethod event-msg-handler :chsk/recv
   [{:as ev-msg :keys [?data]}]
   (println "received message: " ?data)
-  (rf/dispatch [:ws-booking-status-received ?data]))
+  (rf/dispatch [::e-booking-status/ws-booking-status-received ?data]))
 
 (defn event-msg-handler* [{:as ev-msg :keys [id ?data event]}]
   (event-msg-handler ev-msg))
