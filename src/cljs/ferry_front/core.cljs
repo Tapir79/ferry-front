@@ -7,7 +7,8 @@
    [ferry-front.config :as config]
    [ferry-front.styles.global :refer [init-global-styles]]
    [ferry-front.components.header :refer [header]]
-   [ferry-front.views.navigation :refer [main-navigation init-routes!]]))
+   [ferry-front.views.navigation :refer [main-navigation init-routes!]]
+   [ferry-front.util.ws :as ws]))
 
 
 (re-frame/reg-sub
@@ -32,6 +33,7 @@
   (re-frame/clear-subscription-cache!)
   (re-frame/dispatch [::events/initialize-db])
   (init-routes!)
+  (ws/start-router!)
   (reagent/render [main-page]
                   (.getElementById js/document "app")))
 

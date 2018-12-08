@@ -6,7 +6,8 @@
     [reitit.coercion.schema :as rsc]
     [ferry-front.views.confirm-booking :as confirm-booking]
     [ferry-front.views.analysis :as analysis]
-    [ferry-front.views.booking :refer [booking-view]]))
+    [ferry-front.views.booking :refer [booking-view]]
+    [ferry-front.views.booking-status :as booking-status]))
 
 (defonce match (reagent/atom nil))
 
@@ -23,7 +24,10 @@
             :class link-style} "Timetables"]]
       [:li {:class "mr-2 sm:mr-6"}
        [:a {:href (rfe/href ::analysis)
-            :class link-style} "Analysis"]]]
+            :class link-style} "Analysis"]]
+      [:li {:class "mr-2 lg:mr-4"}
+       [:a {:href (rfe/href ::booking-status)
+            :class link-style} "Booking status"]]]
      (if @match
        (let [view (:view (:data @match))]
          [view @match]))])
@@ -39,7 +43,10 @@
        :view analysis/chart-component}]
      ["confirm-booking"
       {:name :confirm-booking
-       :view confirm-booking/main-view}]]
+       :view confirm-booking/main-view}]
+     ["booking-status"
+      {:name ::booking-status
+       :view booking-status/status-view}]]
     {:data {:coercion rsc/coercion}}))
 
 (defn init-routes! []
