@@ -11,7 +11,8 @@
                  [metosin/reitit-schema "0.2.9"]
                  [metosin/reitit-frontend "0.2.9"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
-                 [cljsjs/chartist "0.10.1-0"] ]
+                 [cljsjs/chartist "0.10.1-0"]
+                 [com.taoensso/sente "1.13.1"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 
