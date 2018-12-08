@@ -1,16 +1,12 @@
 (ns ferry-front.views.navigation
   (:require
     [reagent.core :as reagent]
-    [re-frame.core :as re-frame]
     [reitit.frontend :as reitit]
     [reitit.frontend.easy :as rfe]
     [reitit.coercion.schema :as rsc]
-    [ferry-front.components.loader :refer [compass-loader]]
     [ferry-front.views.confirm-booking :as confirm-booking]
     [ferry-front.views.analysis :as analysis]
-    [ferry-front.views.booking :refer [booking-main]]
-    [ferry-front.leaflet.core :refer [leaflet]]
-    [ferry-front.views.map :refer [main-map]]))
+    [ferry-front.views.booking :refer [booking-view]]))
 
 (defonce match (reagent/atom nil))
 
@@ -32,26 +28,12 @@
        (let [view (:view (:data @match))]
          [view @match]))])
 
-(defn main-loader []
-  [:div {:class "flex justify-center items-center h-screen w-screen"}
-   (compass-loader)])
-
-(defn booking-panel    ;; this is new
-  []
-  (let [ready?  (re-frame/subscribe [:initialised?])]
-    (if-not @ready?         ;; do we have good data?
-      (main-loader)   ;; tell them we are working on it
-      [:div {:class "flex"}
-         [booking-main]
-          [:div {:class "hidden sm:block"}
-            [main-map]]])))
-
 (def routes
   (reitit/router
     ["/"
      [""
       {:name ::booking
-       :view booking-panel}]
+       :view booking-view}]
      ["analysis"
       {:name ::analysis
        :view analysis/chart-component}]

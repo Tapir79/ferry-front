@@ -10,8 +10,8 @@
    [ferry-front.views.navigation :refer [main-navigation init-routes!]]))
 
 
-(re-frame/reg-sub   ;; we can check if there is data
-  :initialised?          ;; usage (subscribe [:initialised?])
+(re-frame/reg-sub
+  :initialised?
   (fn  [db _]
     (and (not (nil? (:linesegments db)))
          (not (nil? (:stop-routes db))))))
@@ -36,7 +36,6 @@
                   (.getElementById js/document "app")))
 
 (defn ^:export init []
-  #_(re-frame/dispatch-sync [::events/initialize-db])
   (dev-setup)
   (stylefy/init {:global-vendor-prefixes {::stylefy/vendors ["webkit" "moz" "o"]
                                           ::stylefy/auto-prefix #{:border-radius}}})
