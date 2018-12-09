@@ -32,37 +32,37 @@
              :url      sodra-linjen-json
              :color    "black"
              :linejoin "round"
-             :weight   10
+             :weight   8
              :opacity  0.90}
             {:type     :json
              :url      norra-linjen-json
              :color    "black"
              :linejoin "round"
-             :weight   10
+             :weight   8
              :opacity  0.50}
             {:type     :json
              :url      tvar-linjen-json
              :color    "black"
              :linejoin "round"
-             :weight   10
+             :weight   8
              :opacity  0.50}
             {:type     :json
              :url      sodra-linjen-json
              :color    "red"
              :linejoin "round"
-             :weight   9
+             :weight   7
              :opacity  1.00}
             {:type     :json
              :url      norra-linjen-json
              :color    "blue"
              :linejoin "round"
-             :weight   9
+             :weight   7
              :opacity  1.00}
             {:type     :json
              :url      tvar-linjen-json
              :color    "orange"
              :linejoin "round"
-             :weight   9
+             :weight   7
              :opacity  1.00}
             ])
 
@@ -99,13 +99,13 @@
 (defn jsons-route-highlight [json]
   [{:type     :json
     :url      json
-    :color    "black"
+    :color    "yellow"
     :linejoin "round"
-    :weight   8
+    :weight   6
     :opacity  1.00}
    {:type     :json
     :url      json
-    :color    "yellow"
+    :color    "white"
     :linejoin "round"
     :weight   3
     :opacity  1.00}])

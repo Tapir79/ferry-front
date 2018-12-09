@@ -10,7 +10,8 @@
     [ferry-front.views.analysis :as analysis]
     [ferry-front.views.booking :refer [booking-main]]
     [ferry-front.leaflet.core :refer [leaflet]]
-    [ferry-front.views.map :refer [main-map]]))
+    [ferry-front.views.map :refer [main-map]]
+    [ferry-front.events.booking :as events-booking]))
 
 (defonce match (reagent/atom nil))
 
@@ -54,7 +55,7 @@
        :view booking-panel}]
      ["analysis"
       {:name ::analysis
-       :view analysis/chart-component}]
+       :view analysis/chart-component }]
      ["confirm-booking"
       {:name :confirm-booking
        :view confirm-booking/main-view}]]

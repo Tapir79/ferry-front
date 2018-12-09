@@ -99,27 +99,10 @@
     (doseq [removed old-highlight-json]
       (.removeLayer leaflet removed))
 
+
     ; let's add the now highlighted json to state
     (reagent/set-state this {:jsons highlight-json})
 
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ; Circle geometry
-    ; The javascript
-    ; L.circle([37.786542, -122.386022], {
-    ;          color: "red",
-    ;          fillColor: "#f03",
-    ;          fillOpacity: 0.5,
-    ;          radius: 50.0
-    ;      }).addTo(map);
-
-    (doseq [{:keys [lat lng name] :as layer-spec} stops]
-      (let [layer (js/L.circle (clj->js [lat
-                                         lng])
-                               300
-                               #js {:color       "black"
-                                    :fillColor   "white"
-                                    :fillOpacity 0.9})]
-        (.addTo layer leaflet)))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;// create custom icon
@@ -148,7 +131,7 @@
             customOptions {:maxWidth  30
                            :className "custom"}
             marker (js/L.marker (clj->js [lat lng])
-                                #js {:icon (js/L.icon #js {:iconUrl "anchor7.png"})})]
+                                #js {:icon (js/L.icon #js {:iconUrl "anchor8.png"})})]
         (.bindPopup marker custom-popup customOptions)
         (.addTo marker leaflet)))
 
@@ -197,6 +180,25 @@
         (.addTo layer leaflet)
 
         ))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ; Circle geometry
+    ; The javascript
+    ; L.circle([37.786542, -122.386022], {
+    ;          color: "red",
+    ;          fillColor: "#f03",
+    ;          fillOpacity: 0.5,
+    ;          radius: 50.0
+    ;      }).addTo(map);
+
+    (doseq [{:keys [lat lng name] :as layer-spec} stops]
+      (let [layer (js/L.circle (clj->js [lat
+                                         lng])
+                               500
+                               #js {:color       "white"
+                                    :fillColor   "white"
+                                    :fillOpacity 0.9})]
+        (.addTo layer leaflet)))
 
 
     #_(.setView leaflet (clj->js [lat lng]) 10)

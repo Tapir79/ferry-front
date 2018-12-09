@@ -61,3 +61,21 @@
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success      [::update-test-state]
                   :on-failure      [::http-request-failed]}}))
+
+(rf/reg-event-db
+  ::update-booking-status-count
+  (fn [db [_ status-count]]
+    (assoc db :booking-status-count status-count)))
+
+
+(rf/reg-event-fx
+  ::get-booking-status-count
+  (fn [{:keys [db]} _]
+    {:db         db
+     :http-xhrio {:method          :get
+                  :uri             (str "http://localhost:8080/booking-status-count")
+                  :timeout         8000
+                  :format          (ajax/json-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success      [::update-booking-status-count]
+                  :on-failure      [::ae/http-request-failed]}}))

@@ -6,7 +6,8 @@
     [ajax.core :as ajax]
     [ferry-front.events.events-timetables :as et]
     [ferry-front.events.lines :as lines]
-    [ferry-front.events.stops :as stops]))
+    [ferry-front.events.stops :as stops]
+    [ferry-front.events.booking :as booking]))
 
 (enable-console-print!)
 
@@ -16,7 +17,8 @@
     {:dispatch-n (list [::et/get-stop-routes]
                        [::et/get-line-segments]
                        [::et/get-stops]
-                       [::lines/get-lines])}))
+                       [::lines/get-lines]
+                       [::booking/get-booking-status-count])}))
 
 (re-frame/reg-event-fx
   ::initialize-lines
