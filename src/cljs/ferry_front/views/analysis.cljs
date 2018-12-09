@@ -1,37 +1,83 @@
 (ns ferry-front.views.analysis
   (:require #_[cljsjs.chartist]
-            [reagent.core :as reagent :refer [atom]]))
-
-(defn line-example
-  []
-  (let [chart-data {:labels ["Mar-2012" "Jun-2012" "Nov-2012" "Oct-2013" "Nov-2014"]
-                    :series [[1 1 6 15 25]]}
-        options {:width  "700px"
-                 :height "380px"}]
-    (js/Chartist.Line. ".ct-chart" (clj->js chart-data) (clj->js options))))
+    [reagent.core :as reagent :refer [atom]]))
 
 
-(defn line-bar-example []
+;new Chartist.Pie('.ct-chart', {
+;  series: [20, 10, 30, 40]
+;}, {
+;  donut: true,
+;  donutWidth: 60,
+;  donutSolid: true,
+;  startAngle: 270,
+;  showLabel: true
+;});
+
+(defn pie-example []
+  (let [chart-data {:series [10 20 80 20]}
+        options {:width  "300px"
+                 :height "300px"}
+        ]
+    (js/Chartist.Pie. ".ct-chart3" (clj->js chart-data options))))
+
+(defn bar-example [data options]
+  (let [chart-data data
+        chart-options options]
+    (js/Chartist.Bar. ".ct-chart2" (clj->js chart-data) (clj->js chart-options))))
+
+
+(defn line-example []
   (let [chart-data {:labels [1 2 3 4]
                     :series [[100 120 180 200]]}
-        chart-data2 {:labels [1 2 3 4]
-                     :series [[5 2 8 3]]}
-        options {:width  "700px"
-                 :height "600px"
-                 :seriesBarDistance 10}]
-    (js/Chartist.Bar. "#chart1" (clj->js chart-data options))
-    (js/Chartist.Line. ".chart2" (clj->js chart-data options))))
+        options {:width  "300px"
+                 :height "300px"}]
+    (js/Chartist.Line. ".ct-chart" (clj->js chart-data options))))
 
-(defn chart-component
-  []
+(defn line-component
+  [bar-data bar-options]
   (let [some "state goes here"]
     (reagent/create-class
-      {:component-did-mount #(line-bar-example)
-       :display-name        "chart-component"
+      {:component-did-mount #(line-example)
+       :display-name        "line-component"
        :reagent-render      (fn []
+                              [:div {:class "ct-chart ct-perfect-fourth"}]
+                              #_#_[:div {:id "chart1 ct-golden-section"}]
+                                  [:div {:id "chart2 ct-golden-section"}])})))
+
+(defn bar-component
+  [bar-data bar-options]
+  (let [some "state goes here"]
+    (reagent/create-class
+      {:component-did-mount #(bar-example bar-data bar-options)
+       :display-name        "bar-component"
+       :reagent-render      (fn []
+                              [:div {:class "ct-chart2 ct-perfect-fourth"}]
                               #_[:div {:class "ct-chart ct-perfect-fourth"}]
-                              [:div {:id "chart1 ct-perfect-fourth"}]
-                              [:div {:class "chart2 ct-perfect-fourth"}])})))
+                              #_#_[:div {:id "chart1 ct-golden-section"}]
+                                  [:div {:id "chart2 ct-golden-section"}])})))
+
+(defn donut-component
+  [donut-data donut-options]
+  (let [some "state goes here"]
+    (reagent/create-class
+      {:component-did-mount #(pie-example)
+       :display-name        "donut-component"
+       :reagent-render      (fn []
+                              [:div {:class "ct-chart3 ct-perfect-fourth"}]
+                              #_[:div {:class "ct-chart ct-perfect-fourth"}]
+                              #_#_[:div {:id "chart1 ct-golden-section"}]
+                                  [:div {:id "chart2 ct-golden-section"}])})))
+
+(defn chart-component []
+  (let [bar-data {:labels ["Mar-2012" "Jun-2012" "Nov-2012" "Oct-2013" "Nov-2014"]
+                  :series [[1 1 6 15 25]]}
+        bar-options {:width             "700px"
+                     :height            "380px"
+                     :seriesBarDistance 10}]
+    [:div
+     [bar-component bar-data bar-options]
+     [line-component]
+     [donut-component]]))
 
 
 ;new Chartist.Pie('.ct-chart', {
