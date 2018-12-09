@@ -15,10 +15,10 @@
 
 (defn pie-example []
   (let [chart-data {:series [10 20 80 20]}
-        options {:width  "300px"
-                 :height "300px"}
-        ]
-    (js/Chartist.Pie. ".ct-chart3" (clj->js chart-data options))))
+        options {:width "250"
+                 :startAngle "250"
+                 }]
+    (js/Chartist.Pie. ".ct-chart3" (clj->js chart-data)  (clj->js options))))
 
 (defn bar-example [data options]
   (let [chart-data data
@@ -29,9 +29,9 @@
 (defn line-example []
   (let [chart-data {:labels [1 2 3 4]
                     :series [[100 120 180 200]]}
-        options {:width  "300px"
-                 :height "300px"}]
-    (js/Chartist.Line. ".ct-chart" (clj->js chart-data options))))
+        options {:width  "250"
+                 :height "250"}]
+    (js/Chartist.Line. ".ct-chart" (clj->js chart-data) (clj->js options))))
 
 (defn line-component
   [bar-data bar-options]
@@ -56,7 +56,7 @@
                               #_#_[:div {:id "chart1 ct-golden-section"}]
                                   [:div {:id "chart2 ct-golden-section"}])})))
 
-(defn donut-component
+(defn pie-component
   [donut-data donut-options]
   (let [some "state goes here"]
     (reagent/create-class
@@ -68,16 +68,17 @@
                               #_#_[:div {:id "chart1 ct-golden-section"}]
                                   [:div {:id "chart2 ct-golden-section"}])})))
 
+
 (defn chart-component []
   (let [bar-data {:labels ["Mar-2012" "Jun-2012" "Nov-2012" "Oct-2013" "Nov-2014"]
                   :series [[1 1 6 15 25]]}
-        bar-options {:width             "700px"
-                     :height            "380px"
-                     :seriesBarDistance 10}]
+        bar-options {:width             "300"
+                     :height            "300"
+                     :seriesBarDistance "5"}]
     [:div
      [bar-component bar-data bar-options]
      [line-component]
-     [donut-component]]))
+     [pie-component]]))
 
 
 ;new Chartist.Pie('.ct-chart', {
